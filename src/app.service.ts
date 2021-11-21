@@ -6,9 +6,9 @@ import { PlatformStatus } from './constants/platform-status.consts';
 export class AppService {
   getRoot() {
     return {
-      "status": PlatformStatus.ONLINE,
-      "date": moment().format()
-      }
+      status: PlatformStatus.ONLINE,
+      timestamp: new Date().toISOString(),
+    }
   }
 
 }
