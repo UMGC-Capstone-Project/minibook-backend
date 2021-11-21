@@ -2,8 +2,8 @@
     "type": "mysql",
     "host": "db",
     "port": 3306,
-    "username": "minibook_user_development",
-    "password": "minibook_db_c0nf!g",
+    "username": "root",
+    "password": "db-q5n2g",
     "database": "minibook_development",
     "entities": [],
     "synchronize": true
