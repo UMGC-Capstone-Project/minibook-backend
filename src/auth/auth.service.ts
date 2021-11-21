@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, HttpException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from 'src/dto/CreateUserDto';
+import { UserCreateDto } from 'src/dto/UserCreateDto';
 import { UserDto } from 'src/dto/UserDto';
+import { UserLoginDto } from 'src/dto/UserLoginDto';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -12,30 +13,34 @@ export class AuthService {
     ) { }
 
     // vaildation of the user should be done by jwt token.
-    async validateUser(username: string, pass: string): Promise<any> {
-        return username;
-        // const user = await this.usersService.findOne(username);
-        // if (user && user.password === pass) {
-        //     const { password, ...result } = user;
-        //     return result;
-        // }
+    async validateUser(data: UserLoginDto): Promise<any> {
+        console.log("validateUser: " + data);
+        const { email } = data;
+        console.log(email)
+        const user = await this.usersService.findOne({ email: data });
+        if (user) {
+            return user;
+        }
         return null;
     }
 
-    async login(user: any) {
-        const payload = { username: user.username, password: user.password, sub: user.userId };
+    async login(user: UserLoginDto) {
+        console.log(user);
+        const payload = { email: user.email, password: user.password, sub: 1 };
         return {
             access_token: this.jwtService.sign(payload),
         }
     }
 
-    async register(data: CreateUserDto): Promise<UserDto> {
+    async register(data: UserCreateDto): Promise<UserDto> {
+        console.log(data);
         try {
             const newUser = await this.usersService.create(data);
             return newUser;
-        } catch(error) {
-            console.log("user creation issue");
+        } catch (error) {
+            console.log("hello")
+            throw new HttpException(error, 200);
         }
-        
+
     }
 }

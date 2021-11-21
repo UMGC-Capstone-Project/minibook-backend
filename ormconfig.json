@@ -1,9 +1,0 @@
-{
-    "type": "mysql",
-    "host": "db",
-    "port": 3306,
-    "username": "root",
-    "password": "db-q5n2g",
-    "database": "minibook_development",
-    "synchronize": true
-}

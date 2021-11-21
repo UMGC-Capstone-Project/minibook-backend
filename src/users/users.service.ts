@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserDto } from 'src/dto/CreateUserDto';
+import { UserCreateDto } from 'src/dto/UserCreateDto';
 import { UserDto } from 'src/dto/UserDto';
 import { UserEntity } from 'src/entity/user.entity';
 import { toUserDto } from 'src/shared/mapper';
@@ -18,6 +18,8 @@ export class UsersService {
 
     async findOne(options?: object): Promise<UserDto> {
         const user = await this.userRepository.findOne(options);
+        console.log(options)
+        console.log(user)
         return toUserDto(user);
     }
 
@@ -29,7 +31,7 @@ export class UsersService {
 
     }
 
-    async create(data: CreateUserDto): Promise<UserDto> {
+    async create(data: UserCreateDto): Promise<UserDto> {
         const { displayname, email, password } = data;
 
         const user = await this.userRepository.findOne({ where: { email: email } });

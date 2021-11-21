@@ -10,14 +10,14 @@ import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
-    UsersModule, 
+    UsersModule,
     PassportModule,
-  JwtModule.register({
-    secret: jwtConstants.secret,
-    signOptions: {expiresIn: '60s'},
-  })],
+    JwtModule.register({
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '60s' },
+    })],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],
   controllers: [AuthController]
 })
-export class AuthModule {}
+export class AuthModule { }
