@@ -1,11 +1,11 @@
 import { Entity, ManyToOne, PrimaryGeneratedColumn,  } from "typeorm";
-import { Post } from "./";
+import { PostEntity } from "./post.entity";
 
 @Entity()
-export class Comment {
+export class CommentEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(type => Post, post =>  post.comments)
-    post: Post;
+    @ManyToOne(type => PostEntity, post =>  post.comments)
+    post: PostEntity;
 }

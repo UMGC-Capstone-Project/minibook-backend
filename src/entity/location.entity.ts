@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Profile } from "./";
+import { ProfileEntity } from "./profile.entity";
 
 @Entity()
-export class Location {
+export class LocationEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -13,8 +13,8 @@ export class Location {
     @Column()
     country: string;
     
-    @OneToOne(type => Profile, profile => profile.location)
+    @OneToOne(type => ProfileEntity, profile => profile.location)
     @JoinColumn()
-    profile: Profile;
+    profile: ProfileEntity;
 
 }

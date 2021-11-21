@@ -1,9 +1,13 @@
 import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Newsboard, Friend, Photo, Profile, Notification } from "./";
 import * as argon2 from "argon2";
+import { FriendEntity } from "./friend.entity";
+import { NewsboardEntity } from "./newsboard.entity";
+import { NotificationEntity } from "./notification.entity";
+import { PhotoEntity } from "./photo.entity";
+import { ProfileEntity } from "./profile.entity";
 
 @Entity('user')
-export class User {
+export class UserEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -28,17 +32,17 @@ export class User {
     })
     displayname: string;
 
-    @OneToOne(type => Profile, profile => profile.user)
-    profile: Profile;
+    @OneToOne(type => ProfileEntity, profile => profile.user)
+    profile: ProfileEntity;
 
-    @OneToMany(type => Photo, photo => photo.user)
-    photos: Photo[];
+    @OneToMany(type => PhotoEntity, photo => photo.user)
+    photos: PhotoEntity[];
 
-    @OneToMany(type => Friend, friend => friend.user)
-    friends: Friend[];
+    @OneToMany(type => FriendEntity, friend => friend.user)
+    friends: FriendEntity[];
 
-    @OneToOne(type => Newsboard, newsboard => newsboard.user)
-    newsboard: Newsboard;
+    @OneToOne(type => NewsboardEntity, newsboard => newsboard.user)
+    newsboard: NewsboardEntity;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public created_at: Date;
@@ -49,8 +53,8 @@ export class User {
     // @OneToOne(type => Settings, settings => settings.user)
     // settings: Settings;
 
-    @OneToMany(type => Notification, notification => notification.user)
-    notifications: Notification[]
+    @OneToMany(type => NotificationEntity, notification => notification.user)
+    notifications: NotificationEntity[]
 
     @BeforeInsert()
     async hashPassword() {

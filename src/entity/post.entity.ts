@@ -1,17 +1,18 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Newsboard, Comment } from "./";
+import { CommentEntity } from "./comment.entity";
+import { NewsboardEntity } from "./newsboard.entity";
 
 @Entity()
-export class Post {
+export class PostEntity {
     @PrimaryGeneratedColumn()
     id: number;
     
-    @ManyToOne(type => Newsboard, newsboard => newsboard.posts)
-    newsboard: Newsboard;
+    @ManyToOne(type => NewsboardEntity, newsboard => newsboard.posts)
+    newsboard: NewsboardEntity;
 
     @Column()
     message: string;
 
-    @OneToMany(type => Comment, comment => comment.post)
-    comments: Comment[];
+    @OneToMany(type => CommentEntity, comment => comment.post)
+    comments: CommentEntity[];
 }

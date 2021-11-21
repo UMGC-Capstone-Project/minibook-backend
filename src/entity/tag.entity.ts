@@ -1,15 +1,16 @@
 import { Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User, Photo } from "./";
+import { PhotoEntity } from "./photo.entity";
+import { UserEntity } from "./user.entity";
 
 @Entity()
-export class Tag {
+export class TagEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(type => User)
-    user: User;
+    @OneToOne(type => UserEntity)
+    user: UserEntity;
 
-    @ManyToOne(type => Photo)
-    photo: Photo;
+    @ManyToOne(type => PhotoEntity)
+    photo: PhotoEntity;
     
 }

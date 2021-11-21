@@ -1,8 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { User, Post } from "./";
+import { PostEntity } from "./post.entity";
+import { UserEntity } from "./user.entity";
 
 @Entity()
-export class Newsboard {
+export class NewsboardEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -10,13 +11,13 @@ export class Newsboard {
     @Column("double")
     views: number;
 
-    @OneToMany(type => Post, post => post.newsboard)
-    posts: Post[];
+    @OneToMany(type => PostEntity, post => post.newsboard)
+    posts: PostEntity[];
 
     @Column()
     isPublished: boolean;
 
-    @OneToOne(type => User, user => user.newsboard)
+    @OneToOne(type => UserEntity, user => user.newsboard)
     @JoinColumn()
-    user: User;
+    user: UserEntity;
 }

@@ -1,14 +1,14 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./user.entity";
+import { UserEntity } from "./user.entity";
 
 @Entity()
-export class Notification {
+export class NotificationEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
     
-    @ManyToOne(type => User, user => user.notifications)
-    user: User;
+    @ManyToOne(type => UserEntity, user => user.notifications)
+    user: UserEntity;
     
     @Column()
     code: number;

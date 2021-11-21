@@ -1,8 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, TableForeignKey } from "typeorm";
-import { User, Tag } from "./";
+import { TagEntity } from "./tag.entity";
+import { UserEntity } from "./user.entity";
 
 @Entity()
-export class Photo {
+export class PhotoEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -24,9 +25,9 @@ export class Photo {
     @Column()
     isPublished: boolean;
 
-    @OneToMany(type => Tag, tag => tag.photo)
-    tags: Tag[];
+    @OneToMany(type => TagEntity, tag => tag.photo)
+    tags: TagEntity[];
 
-    @ManyToOne(type => User, user => user.photos)
-    user: User;
+    @ManyToOne(type => UserEntity, user => user.photos)
+    user: UserEntity;
 }

@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne } from "typeorm";
-import { User } from "./";
+import { UserEntity } from "./user.entity";
 
 @Entity()
-export class Friend {
+export class FriendEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -10,9 +10,9 @@ export class Friend {
     @Column("double")
     count: number;
 
-    @OneToOne(type => User)
-    friend: User;
+    @OneToOne(type => UserEntity)
+    friend: UserEntity;
 
-    @ManyToOne(type => User, user => user.friends)
-    user: User;
+    @ManyToOne(type => UserEntity, user => user.friends)
+    user: UserEntity;
 }

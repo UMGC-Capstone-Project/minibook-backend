@@ -1,8 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from "typeorm";
-import { User, Location } from "./";
+import { LocationEntity } from "./location.entity";
+import { UserEntity } from "./user.entity";
 
 @Entity()
-export class Profile {
+export class ProfileEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -25,8 +26,8 @@ export class Profile {
     @Column()
     gender: number;
 
-    @OneToOne(type => Location)
-    location: Location
+    @OneToOne(type => LocationEntity)
+    location: LocationEntity
 
     @Column()
     age: number;
@@ -34,7 +35,7 @@ export class Profile {
     @Column()
     isPublished: boolean;
 
-    @OneToOne(type => User, user => user.profile)
+    @OneToOne(type => UserEntity, user => user.profile)
     @JoinColumn()
-    user: User;
+    user: UserEntity;
 }
