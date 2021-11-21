@@ -1,17 +1,32 @@
-import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Newsboard, Friend, Photo, Profile, Notification } from "./";
+import * as argon2 from "argon2";
 
-@Entity()
+@Entity('user')
 export class User {
 
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({
+        type: 'varchar',
+        nullable: false,
+        unique: true
+    })
     email: string;
 
-    @Column()
+    @Column({
+        type: 'varchar', 
+        nullable: false 
+    })
     password: string;
+
+    @Column({
+        type: 'varchar', 
+        nullable: false,
+        unique: true
+    })
+    displayname: string;
 
     @OneToOne(type => Profile, profile => profile.user)
     profile: Profile;
@@ -36,4 +51,9 @@ export class User {
 
     @OneToMany(type => Notification, notification => notification.user)
     notifications: Notification[]
+
+    @BeforeInsert()
+    async hashPassword() {
+        this.password = await argon2.hash(this.password)
+    }
 }
