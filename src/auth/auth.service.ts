@@ -1,9 +1,12 @@
-import { ConsoleLogger, HttpException, Injectable } from '@nestjs/common';
+import { ConsoleLogger, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { AuthenticationPayload } from 'src/dto/AuthenticationPayload';
+import { AccessTokenPayload } from 'src/dto/AccessTokenPayload';
 import { UserCreateDto } from 'src/dto/UserCreateDto';
 import { UserDto } from 'src/dto/UserDto';
 import { UserLoginDto } from 'src/dto/UserLoginDto';
 import { UsersService } from 'src/users/users.service';
+import { isPasswordMatching } from 'src/shared/utils';
 
 @Injectable()
 export class AuthService {
@@ -12,35 +15,42 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) { }
 
-    // vaildation of the user should be done by jwt token.
-    async validateUser(data: UserLoginDto): Promise<any> {
-        console.log("validateUser: " + data);
-        const { email } = data;
-        console.log(email)
-        const user = await this.usersService.findOne({ email: data });
-        if (user) {
-            return user;
+    // TODO: add error handling
+    async register(data: UserCreateDto): Promise<UserDto> {
+        return await this.usersService.create(data);
+    }
+
+    // TODO: add error handling
+    async login(userLoginDto: UserLoginDto): Promise<AccessTokenPayload> {
+        const user: UserDto = await this.usersService.findByLogin(userLoginDto);
+        const authenticationPayload = this.createAuthenticationPayload(user)
+        const tokenPayload = await this.createToken(authenticationPayload)
+
+        return {
+            access_token: tokenPayload
+        };
+    }
+
+    // ## Helpers ##
+    async validateUser(email: string, password: string): Promise<any> {
+        const user = await this.usersService.findByEmail(email);
+
+        if (user && await isPasswordMatching(user.password, password)) {
+            const { password, ...result } = user;
+            return result;
         }
         return null;
     }
 
-    async login(user: UserLoginDto) {
-        console.log(user);
-        const payload = { email: user.email, password: user.password, sub: 1 };
-        return {
-            access_token: this.jwtService.sign(payload),
-        }
+    private async createToken(payload: AuthenticationPayload): Promise<string> {
+        return await this.jwtService.signAsync(payload)
     }
 
-    async register(data: UserCreateDto): Promise<UserDto> {
-        console.log(data);
-        try {
-            const newUser = await this.usersService.create(data);
-            return newUser;
-        } catch (error) {
-            console.log("hello")
-            throw new HttpException(error, 200);
+    private createAuthenticationPayload(data: UserDto): AuthenticationPayload {
+        return {
+            displayName: data.displayname,
+            email: data.email,
+            userId: data.id
         }
-
     }
 }

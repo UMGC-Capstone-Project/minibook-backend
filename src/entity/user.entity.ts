@@ -5,7 +5,7 @@ import * as argon2 from "argon2";
 export class UserEntity {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
 
     @Column({
         type: 'varchar',
@@ -23,7 +23,7 @@ export class UserEntity {
     @Column({
         type: 'varchar',
         nullable: false,
-        unique: true
+        unique: false
     })
     displayname: string;
 
@@ -52,7 +52,7 @@ export class UserEntity {
     // notifications: NotificationEntity[]
 
     @BeforeInsert()
-    async hashPassword() {
+    private async hashPassword() {
         this.password = await argon2.hash(this.password)
     }
 }

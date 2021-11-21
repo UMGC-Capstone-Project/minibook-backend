@@ -8,19 +8,11 @@ import { LocalAuthGuard } from './auth/guard/local-auth.guard';
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
-    private readonly authService: AuthService
+    private readonly appService: AppService
   ) { }
 
   @Get('/')
   getRoot() {
     return this.appService.getRoot();
   }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  async profile(@Request() req): Promise<any> {
-    return req.user;
-  }
-
 }

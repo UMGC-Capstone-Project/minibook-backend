@@ -4,6 +4,7 @@ import { UserCreateDto } from 'src/dto/UserCreateDto';
 import { UserDto } from 'src/dto/UserDto';
 import { UserEntity } from 'src/entity/user.entity';
 import { toUserDto } from 'src/shared/mapper';
+import { isPasswordMatching } from 'src/shared/utils';
 import { Repository } from 'typeorm';
 
 export type User = any;
@@ -16,37 +17,50 @@ export class UsersService {
         private readonly userRepository: Repository<UserEntity>,
     ) { }
 
-    async findOne(options?: object): Promise<UserDto> {
-        const user = await this.userRepository.findOne(options);
-        console.log(options)
-        console.log(user)
+    async create(data: UserCreateDto): Promise<UserDto> {
+        const { displayname, email, password } = data;
+        const isExists = await this.findByEmail(email);
+
+        if (isExists)
+            throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
+
+        const user = this.userRepository.create({
+            displayname: displayname,
+            email: email,
+            password: password,
+        });
+
+        await this.userRepository.save(user);
         return toUserDto(user);
     }
 
-    findByLogin() {
-
+    async findOne(options?: object): Promise<UserDto> {
+        const user = await this.userRepository.findOne(options);
+        return toUserDto(user);
     }
 
-    findByPayload() {
-
+    async findByPayload(email: string): Promise<UserDto> {
+        return this.findOne({ where: { email: email } })
     }
 
-    async create(data: UserCreateDto): Promise<UserDto> {
-        const { displayname, email, password } = data;
-
-        const user = await this.userRepository.findOne({ where: { email: email } });
-
-        if (user)
-            throw new HttpException('email already exists', HttpStatus.BAD_REQUEST);
-
-        const newUser: UserEntity = this.userRepository.create({
-            email: email,
-            password: password,
-            displayname: displayname,
-        })
-
-        await this.userRepository.save(newUser);
-
-        return toUserDto(newUser);
+    async findByEmail(email: string): Promise<UserEntity | undefined> {
+        return await this.userRepository.findOne({ where: { email: email } });
     }
+
+    async findById(id: number): Promise<UserEntity> {
+        return await this.userRepository.findOne({ where: { id: id } });
+    }
+
+    async findByLogin({ email, password }): Promise<UserDto> {
+        const user = await this.findByEmail(email);
+
+        if (!user)
+            throw new HttpException('user not found', HttpStatus.UNAUTHORIZED);
+
+        if (!isPasswordMatching(user.password, password))
+            throw new HttpException('invalid credentials', HttpStatus.UNAUTHORIZED);
+
+        return toUserDto(user);
+    }
+
 }
