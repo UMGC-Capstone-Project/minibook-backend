@@ -10,11 +10,4 @@ export class AppController {
     return this.appService.getRoot();
   }
 
-  // // GET /404
-  // error() {
-  //   return {
-  //   "code": 404,
-  //   "message": "not found"
-  //   }
-  // }
 }
