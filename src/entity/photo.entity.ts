@@ -1,7 +1,5 @@
-import { type } from "os";
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, TableForeignKey } from "typeorm";
-import { Tag } from "./tag.entity";
-import { User } from "./user.entity";
+import { User, Tag } from "./";
 
 @Entity()
 export class Photo {

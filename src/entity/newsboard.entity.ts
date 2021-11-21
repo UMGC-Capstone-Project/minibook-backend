@@ -1,9 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { Post } from "./post.entity";
-import { User } from "./user.entity";
+import { User, Post } from "./";
 
 @Entity()
-export class NewsBoard {
+export class Newsboard {
 
     @PrimaryGeneratedColumn()
     id: number;

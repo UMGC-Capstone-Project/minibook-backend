@@ -1,10 +1,5 @@
-import { Settings } from "http2";
 import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Friend } from "./friend.entity";
-import { NewsBoard } from "./newsboard.entity";
-import { Photo } from "./photo.entity";
-import { Profile } from "./profile.entity";
-import {Notification} from "./notification.entity";
+import { Newsboard, Friend, Photo, Profile, Notification } from "./";
 
 @Entity()
 export class User {
@@ -27,8 +22,8 @@ export class User {
     @OneToMany(type => Friend, friend => friend.user)
     friends: Friend[];
 
-    @OneToOne(type => NewsBoard, newsboard => newsboard.user)
-    newsboard: NewsBoard;
+    @OneToOne(type => Newsboard, newsboard => newsboard.user)
+    newsboard: Newsboard;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public created_at: Date;

@@ -1,14 +1,13 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { NewsBoard } from "./newsboard.entity";
-import { Comment } from './comment.entity';
+import { Newsboard, Comment } from "./";
 
 @Entity()
 export class Post {
     @PrimaryGeneratedColumn()
     id: number;
     
-    @ManyToOne(type => NewsBoard, newsboard => newsboard.posts)
-    newsboard: NewsBoard;
+    @ManyToOne(type => Newsboard, newsboard => newsboard.posts)
+    newsboard: Newsboard;
 
     @Column()
     message: string;
