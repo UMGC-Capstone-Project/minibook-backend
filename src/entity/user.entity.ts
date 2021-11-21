@@ -6,7 +6,7 @@ import { NotificationEntity } from "./notification.entity";
 import { PhotoEntity } from "./photo.entity";
 import { ProfileEntity } from "./profile.entity";
 
-@Entity('user')
+@Entity({ name: 'users' })
 export class UserEntity {
 
     @PrimaryGeneratedColumn()
@@ -32,29 +32,29 @@ export class UserEntity {
     })
     displayname: string;
 
-    @OneToOne(type => ProfileEntity, profile => profile.user)
-    profile: ProfileEntity;
+    // @OneToOne(type => ProfileEntity, profile => profile.user)
+    // profile: ProfileEntity;
 
-    @OneToMany(type => PhotoEntity, photo => photo.user)
-    photos: PhotoEntity[];
+    // @OneToMany(type => PhotoEntity, photo => photo.user)
+    // photos: PhotoEntity[];
 
-    @OneToMany(type => FriendEntity, friend => friend.user)
-    friends: FriendEntity[];
+    // @OneToMany(type => FriendEntity, friend => friend.user)
+    // friends: FriendEntity[];
 
-    @OneToOne(type => NewsboardEntity, newsboard => newsboard.user)
-    newsboard: NewsboardEntity;
+    // @OneToOne(type => NewsboardEntity, newsboard => newsboard.user)
+    // newsboard: NewsboardEntity;
 
-    @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
-    public created_at: Date;
+    // @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
+    // public created_at: Date;
 
-    @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
-    public updated_at: Date;
+    // @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
+    // public updated_at: Date;
 
     // @OneToOne(type => Settings, settings => settings.user)
     // settings: Settings;
 
-    @OneToMany(type => NotificationEntity, notification => notification.user)
-    notifications: NotificationEntity[]
+    // @OneToMany(type => NotificationEntity, notification => notification.user)
+    // notifications: NotificationEntity[]
 
     @BeforeInsert()
     async hashPassword() {

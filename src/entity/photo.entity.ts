@@ -28,6 +28,6 @@ export class PhotoEntity {
     @OneToMany(type => TagEntity, tag => tag.photo)
     tags: TagEntity[];
 
-    @ManyToOne(type => UserEntity, user => user.photos)
-    user: UserEntity;
+    // @ManyToOne(type => UserEntity, user => user.photos)
+    // user: UserEntity;
 }

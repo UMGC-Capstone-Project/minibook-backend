@@ -1,4 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateUserDto } from 'src/dto/CreateUserDto';
+import { UserDto } from 'src/dto/UserDto';
+import { UserEntity } from 'src/entity/user.entity';
+import { toUserDto } from 'src/shared/mapper';
+import { Repository } from 'typeorm';
 
 export type User = any;
 
@@ -17,7 +23,40 @@ export class UsersService {
         }
     ]
 
-    async findOne(username: string): Promise<User | undefined> {
-        return this.users.find(user => user.username === username);
+    constructor(
+        @InjectRepository(UserEntity)
+        private readonly userRepository: Repository<UserEntity>,
+    ) { }
+
+    async findOne(options?: object): Promise<UserDto> {
+        const user = await this.userRepository.findOne(options);
+        return toUserDto(user);
+    }
+
+    findByLogin() {
+
+    }
+
+    findByPayload() {
+
+    }
+
+    async create(data: CreateUserDto): Promise<UserDto> {
+        const { displayname, email, password } = data;
+
+        const user = await this.userRepository.findOne({ where: { email: email } });
+
+        if (user)
+            throw new HttpException('email already exists', HttpStatus.BAD_REQUEST);
+
+        const newUser: UserEntity = this.userRepository.create({
+            email: email,
+            password: password,
+            displayname: displayname,
+        })
+
+        await this.userRepository.save(newUser);
+
+        return toUserDto(newUser);
     }
 }

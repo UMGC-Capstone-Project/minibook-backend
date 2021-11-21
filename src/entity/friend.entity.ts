@@ -13,6 +13,6 @@ export class FriendEntity {
     @OneToOne(type => UserEntity)
     friend: UserEntity;
 
-    @ManyToOne(type => UserEntity, user => user.friends)
-    user: UserEntity;
+    // @ManyToOne(type => UserEntity, user => user.friends)
+    // user: UserEntity;
 }

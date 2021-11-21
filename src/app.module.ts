@@ -16,22 +16,26 @@ import { UserEntity } from './entity/user.entity';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(
-    {
-      entities: [
-        CommentEntity,
-        FriendEntity,
-        LocationEntity,
-        NewsboardEntity,
-        NotificationEntity,
-        PhotoEntity,
-        PostEntity,
-        ProfileEntity,
-        TagEntity,
-        UserEntity
-      ]
-    }
-  ), AuthModule, UsersModule],
+  imports: [
+    TypeOrmModule.forRoot(
+      {
+        entities: [
+          CommentEntity,
+          FriendEntity,
+          LocationEntity,
+          NewsboardEntity,
+          NotificationEntity,
+          PhotoEntity,
+          PostEntity,
+          ProfileEntity,
+          TagEntity,
+          UserEntity
+        ]
+      }
+    ),
+    AuthModule,
+    UsersModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

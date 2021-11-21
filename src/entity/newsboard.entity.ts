@@ -17,7 +17,7 @@ export class NewsboardEntity {
     @Column()
     isPublished: boolean;
 
-    @OneToOne(type => UserEntity, user => user.newsboard)
-    @JoinColumn()
-    user: UserEntity;
+    // @OneToOne(type => UserEntity, user => user.newsboard)
+    // @JoinColumn()
+    // user: UserEntity;
 }

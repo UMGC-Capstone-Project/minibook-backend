@@ -35,7 +35,7 @@ export class ProfileEntity {
     @Column()
     isPublished: boolean;
 
-    @OneToOne(type => UserEntity, user => user.profile)
-    @JoinColumn()
-    user: UserEntity;
+    // @OneToOne(type => UserEntity, user => user.profile)
+    // @JoinColumn()
+    // user: UserEntity;
 }
