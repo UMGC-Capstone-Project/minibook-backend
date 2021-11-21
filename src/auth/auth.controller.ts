@@ -20,7 +20,11 @@ export class AuthController {
     @Post('login')
     @UseGuards(LocalAuthGuard)
     async login(@Body() userLoginDto: UserLoginDto) {
-        console.log("Login: " + JSON.stringify(userLoginDto))
         return this.authService.login(userLoginDto);
+    }
+    
+    @Post('recover')
+    recover(email: string) {
+        throw new Error('Method not implemented.');
     }
 }

@@ -43,12 +43,16 @@ export class UsersService {
         return this.findOne({ where: { email: email } })
     }
 
-    async findByEmail(email: string): Promise<UserEntity | undefined> {
+    async findByEmail(email: string): Promise<UserEntity> {
         return await this.userRepository.findOne({ where: { email: email } });
     }
 
     async findById(id: number): Promise<UserEntity> {
         return await this.userRepository.findOne({ where: { id: id } });
+    }
+
+    async findByDisplayName(displayName: string): Promise<UserEntity> {
+        return await this.userRepository.findOne({ where: { displayname: displayName } });
     }
 
     async findByLogin({ email, password }): Promise<UserDto> {

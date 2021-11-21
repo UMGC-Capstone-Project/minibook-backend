@@ -11,8 +11,8 @@ export class AppController {
     private readonly appService: AppService
   ) { }
 
-  @Get('/')
-  getRoot() {
+  @Get('/status')
+  index() {
     return this.appService.getRoot();
   }
 }

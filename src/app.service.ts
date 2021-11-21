@@ -4,6 +4,7 @@ import { PlatformStatus } from './enums';
 
 @Injectable()
 export class AppService {
+  
   getRoot() {
     return {
       status: PlatformStatus.ONLINE,
