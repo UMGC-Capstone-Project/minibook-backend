@@ -1,8 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import * as moment from 'moment';
+import { PlatformStatus } from './constants/platform-status.consts';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!!!';
+  getRoot() {
+    return {
+      "status": PlatformStatus.ONLINE,
+      "date": moment().format()
+      }
   }
+
 }
