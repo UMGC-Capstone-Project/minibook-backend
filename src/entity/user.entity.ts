@@ -1,12 +1,7 @@
 import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import * as argon2 from "argon2";
-import { FriendEntity } from "./friend.entity";
-import { NewsboardEntity } from "./newsboard.entity";
-import { NotificationEntity } from "./notification.entity";
-import { PhotoEntity } from "./photo.entity";
-import { ProfileEntity } from "./profile.entity";
 
-@Entity({ name: 'users' })
+@Entity({ name: 'user' })
 export class UserEntity {
 
     @PrimaryGeneratedColumn()

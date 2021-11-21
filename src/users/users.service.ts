@@ -10,18 +10,6 @@ export type User = any;
 
 @Injectable()
 export class UsersService {
-    private readonly users = [
-        {
-            userId: 1,
-            username: 'john',
-            password: 'doe'
-        },
-        {
-            userId: 2,
-            username: 'jane',
-            password: 'doe'
-        }
-    ]
 
     constructor(
         @InjectRepository(UserEntity)
