@@ -16,13 +16,13 @@ export class User {
     email: string;
 
     @Column({
-        type: 'varchar', 
-        nullable: false 
+        type: 'varchar',
+        nullable: false
     })
     password: string;
 
     @Column({
-        type: 'varchar', 
+        type: 'varchar',
         nullable: false,
         unique: true
     })
