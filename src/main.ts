@@ -5,6 +5,6 @@ import { NotFoundExceptionFilter } from './common/exception/notfoundexception.fi
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new NotFoundExceptionFilter());
-  await app.listen(3000, '0.0.0.0');
+  await app.listen(parseInt(process.env.APP_PORT, 0) || 3000);
 }
 bootstrap();

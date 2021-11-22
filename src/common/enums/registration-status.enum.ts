@@ -1,3 +1,3 @@
 export enum RegistrationStatus {
-    UNKNOWN
+  UNKNOWN,
 }

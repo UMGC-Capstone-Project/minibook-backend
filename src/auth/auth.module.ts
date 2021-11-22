@@ -15,9 +15,10 @@ import { UsersModule } from '../user/users.module';
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '3600s' },
-    })],
+    }),
+  ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],
-  controllers: [AuthController]
+  controllers: [AuthController],
 })
-export class AuthModule { }
+export class AuthModule {}

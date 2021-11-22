@@ -1,16 +1,22 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-@Entity({name: 'post'})
+@Entity({ name: 'post' })
 export class PostEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
-    
-    // @ManyToOne(type => NewsPostEntity, newsboard => newsboard.posts)
-    // newsboard: NewsPostEntity;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    message: string;
+  // @ManyToOne(type => NewsPostEntity, newsboard => newsboard.posts)
+  // newsboard: NewsPostEntity;
 
-    // @OneToMany(type => Comment, comment => comment.post)
-    // comments: Comment[];
+  @Column()
+  message: string;
+
+  // @OneToMany(type => Comment, comment => comment.post)
+  // comments: Comment[];
 }

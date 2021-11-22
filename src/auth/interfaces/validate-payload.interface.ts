@@ -1,3 +1,3 @@
 export interface AuthenticationPayload {
-    username: string;
+  username: string;
 }

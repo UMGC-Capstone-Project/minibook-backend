@@ -1,5 +1,5 @@
 export interface AuthenticationPayload {
-    id: number;
-    displayName: string;
-    email: string;
+  id: number;
+  displayName: string;
+  email: string;
 }

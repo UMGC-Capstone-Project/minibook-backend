@@ -1,3 +1,3 @@
 export enum DatabaseErrorCode {
-    UniqueViolation = '23505'
+  UniqueViolation = '23505',
 }

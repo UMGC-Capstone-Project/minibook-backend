@@ -1,9 +1,8 @@
-import { UserEntity } from "../user/entities/user.entity";
-import { UserDto } from "./dto/UserDto";
-
+import { UserEntity } from '../user/entities/user.entity';
+import { UserDto } from './dto/UserDto';
 
 export const toUserDto = (data: UserEntity): UserDto => {
-    const { id, displayname, email } = data;
-    let userDto: UserDto = { id, displayname, email };
-    return userDto;
-}
+  const { id, displayname, email } = data;
+  const userDto: UserDto = { id, displayname, email };
+  return userDto;
+};

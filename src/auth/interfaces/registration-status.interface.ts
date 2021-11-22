@@ -1,4 +1,4 @@
 export interface IRegistrationStatus {
-    sucess: boolean;
-    message: string;
+  sucess: boolean;
+  message: string;
 }

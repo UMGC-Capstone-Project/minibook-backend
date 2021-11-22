@@ -35,8 +35,7 @@ EjOsp72HFhlNQdF6CkHLxpTCq4GB5DPDMj//nps45OQXcqNOfnd2Wp3dnzp6RD+3
 Udj7deCC0xgI2qLo7o50Fp/ex7/so8/ekdvg0MRo/jUahL1M/p1MizSdg5ds7tu1
 22YYkePuCrCHiz6oSjgS2IEGUzoJPz2rZaC+3ilm6Vwmi8ctaKDgfb6ZO0xqhePO
 xRa9OIeZ7iZzfhUNnqTTpecZadpTfYkWf/93uuN9j0Kq6PMJ+w==
------END CERTIFICATE-----`)
-
+-----END CERTIFICATE-----`);
 
 @Module({
   imports: [
@@ -44,7 +43,7 @@ xRa9OIeZ7iZzfhUNnqTTpecZadpTfYkWf/93uuN9j0Kq6PMJ+w==
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         name: 'default',
-        type: "postgres",
+        type: 'postgres',
         host: process.env.DATABASE_HOST,
         port: parseInt(process.env.DATABASE_PORT, 0),
         database: process.env.DATABASE_NAME,
@@ -53,21 +52,17 @@ xRa9OIeZ7iZzfhUNnqTTpecZadpTfYkWf/93uuN9j0Kq6PMJ+w==
         synchronize: Boolean(process.env.DB_SYNCHRONIZE),
         logging: true,
         ssl: {
-          ca: certKey
+          ca: certKey,
         },
-        entities: [
-          UserEntity,
-          NewsPostEntity,
-          PostEntity
-        ]
+        entities: [UserEntity, NewsPostEntity, PostEntity],
       }),
     }),
     AuthModule,
     UsersModule,
     FeedModule,
-    HealthModule
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

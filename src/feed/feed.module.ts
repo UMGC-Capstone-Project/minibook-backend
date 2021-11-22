@@ -8,6 +8,6 @@ import { FeedService } from './services/feed.service';
 @Module({
   imports: [TypeOrmModule.forFeature([NewsPostEntity]), UsersModule],
   controllers: [FeedController],
-  providers: [FeedService]
+  providers: [FeedService],
 })
 export class FeedModule {}
