@@ -49,7 +49,18 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
       -
         name: Tags output
-        run: echo ${{ steps.meta.outputs.tags }}
+        run: |
+          echo ${{ steps.meta.outputs.tags }}
+          echo ${{ steps.meta.outputs.labels }}
+
+      - 
+        name: Lower case string output
+        id: string
+        uses: ASzc/change-string-case-action@v1
+        with:
+          string: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$(date +%s)
+        run: |
+          echo "${{ steps.string.outputs.lowercase }}"
 
       # - name: Build and push Docker image
       #   uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
