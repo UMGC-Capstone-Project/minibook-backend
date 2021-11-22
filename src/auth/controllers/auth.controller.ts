@@ -2,8 +2,9 @@ import { Controller, Post, UseGuards, Request, HttpCode, Body, HttpException, Ht
 import { UserCreateDto } from 'src/dto/UserCreateDto';
 import { UserLoginDto } from 'src/dto/UserLoginDto';
 import { UserRequest } from 'src/shared/decorator';
-import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './guard';
+import { AuthService } from '../services/auth.service';
+import { UserRecoverDto } from '../dto/UserRecoverDto';
+import { LocalAuthGuard } from '../guard';
 
 @Controller('auth')
 export class AuthController {
@@ -17,16 +18,15 @@ export class AuthController {
         return this.authService.register(createUserDto);
     }
 
-
     @Post('login')
     @HttpCode(200)
     @UseGuards(LocalAuthGuard)
-    async login(@UserRequest() user) {
-        return this.authService.login(user);
+    async login(@UserRequest() userRequest) {
+        return this.authService.login(userRequest);
     }
 
     @Post('recover')
-    recover(email: string) {
-        throw new Error('Method not implemented.');
+    recover(@Body() userRecoverDto: UserRecoverDto) {
+        return this.authService.recover(userRecoverDto.email);
     }
 }

@@ -3,11 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { NewsboardEntity } from './entity/newsboard.entity';
-import { PostEntity } from './entity/post.entity';
-import { UserEntity } from './entity/user.entity';
+import { NewsPostEntity } from './feed/entities/news-post.entity';
 import { UsersModule } from './users/users.module';
-import { PostsModule } from './posts/posts.module';
+import { FeedModule } from './feed/feed.module';
+import { PostEntity } from './feed/entities/post.entity';
+import { UserEntity } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -22,14 +22,14 @@ import { PostsModule } from './posts/posts.module';
         synchronize: true,
         entities: [
           UserEntity,
-          NewsboardEntity,
+          NewsPostEntity,
           PostEntity
         ]
       }
     ),
     AuthModule,
     UsersModule,
-    PostsModule
+    FeedModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -5,21 +5,19 @@ import { AccessTokenPayload } from 'src/dto/AccessTokenPayload';
 import { UserCreateDto } from 'src/dto/UserCreateDto';
 import { UserDto } from 'src/dto/UserDto';
 import { isPasswordMatching } from 'src/shared/utils';
-import { UserEntity } from 'src/entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { User } from 'src/users/services/users.service';
 
 @Injectable()
 export class AuthService {
+
     constructor(
         @InjectRepository(UserEntity)
         private readonly userRepository: Repository<UserEntity>,
         private readonly jwtService: JwtService,
     ) { }
-
-    async isUserExists(email: string): Promise<boolean> {
-        return !!await this.userRepository.findOne({ where: { email: email } });
-    }
 
     public async register(data: UserCreateDto): Promise<any> {
         if(await this.isUserExists(data.email))
@@ -42,15 +40,23 @@ export class AuthService {
         };
     }
 
+    recover(email: string) {
+        throw new Error('Method not implemented.');
+    }
+
     // ## Helpers ##
-    public async validateUser(email: string, password: string): Promise<UserDto | null> {
+    public async validateUser(email: string, password: string): Promise<User> {
         const user = await this.userRepository.findOne({where: {email: email}});
 
         if (user && await isPasswordMatching(user.password, password)) {
-            const { password, newsboard, ...result }= user;
+            const { password, newsposts, ...result }= user;
             return result;
         }
         return null;
+    }
+
+    async isUserExists(email: string): Promise<boolean> {
+        return !!await this.userRepository.findOne({ where: { email: email } });
     }
 
     private async createToken(payload: AuthenticationPayload): Promise<string> {
@@ -61,7 +67,7 @@ export class AuthService {
         return {
             displayName: data.displayname,
             email: data.email,
-            userId: data.id
+            id: data.id
         }
     }
 }

@@ -4,9 +4,9 @@ import { UserDto } from 'src/dto/UserDto';
 import { UserRequestDto } from 'src/dto/UserRequestDto';
 import { UserRequest } from 'src/shared/decorator';
 import { toUserDto } from 'src/shared/mapper';
-import { UsersService } from './users.service';
+import { UsersService } from '../services/users.service';
 
-@Controller()
+@Controller('users')
 export class UsersController {
 
     constructor(
@@ -26,9 +26,9 @@ export class UsersController {
         return user;
     }
 
-    @Get('/:id')
+    @Get(':id')
     async indexById(@Param() params): Promise<UserDto> {
-        console.log("index: " + params);
+        console.log("index :id: " + params);
         // returns current authenticated users newsboard infromation.
         const user = await this.usersService.findById(params.id);
 

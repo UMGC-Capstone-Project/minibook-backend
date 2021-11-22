@@ -2,10 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserCreateDto } from 'src/dto/UserCreateDto';
 import { UserDto } from 'src/dto/UserDto';
-import { UserEntity } from 'src/entity/user.entity';
 import { toUserDto } from 'src/shared/mapper';
 import { isPasswordMatching } from 'src/shared/utils';
 import { Repository } from 'typeorm';
+import { UserEntity } from '../entities/user.entity';
 
 export type User = any;
 
@@ -53,7 +53,7 @@ export class UsersService {
     }
 
     async findById(id: number): Promise<UserEntity> {
-        return await this.userRepository.findOne({ where: { id: id } });
+        return await this.userRepository.findOne(id);
     }
 
     async findByDisplayName(displayName: string): Promise<UserEntity> {
