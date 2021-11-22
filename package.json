@@ -1,5 +1,9 @@
 {
   "name": "minibook-backend",
+  "engines": {
+    "node": ">=16.13.0"
+  },
+  "engineStrict": true,
   "version": "0.0.1",
   "description": "",
   "author": "",
