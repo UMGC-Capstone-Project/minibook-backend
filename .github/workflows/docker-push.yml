@@ -51,7 +51,6 @@ jobs:
       - name: Tags output
         run: |
           echo ${{ steps.meta.outputs.tags }}
-          echo ${{ steps.meta.outputs.labels }}
 
       - name: lowercase string
         id: string
