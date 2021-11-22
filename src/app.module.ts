@@ -9,6 +9,7 @@ import { FeedModule } from './feed/feed.module';
 import { PostEntity } from './feed/entities/post.entity';
 import { UserEntity } from './user/entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
+import { HealthModule } from './health/health.module';
 
 const certKey = Buffer.from(`-----BEGIN CERTIFICATE-----
 MIIEQTCCAqmgAwIBAgIUJ+17wuTGyyBPcI4pySoJYjNwbbMwDQYJKoZIhvcNAQEM
@@ -58,7 +59,8 @@ xRa9OIeZ7iZzfhUNnqTTpecZadpTfYkWf/93uuN9j0Kq6PMJ+w==
     ),
     AuthModule,
     UsersModule,
-    FeedModule
+    FeedModule,
+    HealthModule
   ],
   controllers: [AppController],
   providers: [AppService],
