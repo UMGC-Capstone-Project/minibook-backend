@@ -41,22 +41,27 @@ xRa9OIeZ7iZzfhUNnqTTpecZadpTfYkWf/93uuN9j0Kq6PMJ+w==
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot(
-      {
+    TypeOrmModule.forRootAsync({
+      useFactory: () => ({
         name: 'default',
         type: "postgres",
-        url: process.env.DB_CONNECTION_STRING,
+        host: process.env.DATABASE_HOST,
+        port: parseInt(process.env.DATABASE_PORT, 0),
+        database: process.env.DATABASE_NAME,
+        username: process.env.DATABASE_USERNAME,
+        password: process.env.DATABASE_PASSWORD,
+        synchronize: Boolean(process.env.DB_SYNCHRONIZE),
+        logging: true,
         ssl: {
           ca: certKey
         },
-        synchronize: Boolean(process.env.DB_SYNCHRONIZE),
         entities: [
           UserEntity,
           NewsPostEntity,
           PostEntity
         ]
-      }
-    ),
+      }),
+    }),
     AuthModule,
     UsersModule,
     FeedModule,

@@ -13,12 +13,18 @@ services:
     envs:
       - key: API_URL
         value: https://api.minibook.io/
-      - key: DB_CONNECTION_STRING
+      - key: DATABASE_HOST
+        value: 
+      - key: DATABASE_PORT
+        value: 
+      - key: DATABASE_USERNAME
+        value: 
+      - key: DATABASE_PASSWORD
+        value: 
+      - key: DATABASE_CA_CERT
         value: 
       - key: DB_SYNCHRONIZE
         value: true
-      - key: DATABASE_CA_CERT
-        value: 
     routes:
       - path: /
     health_check:
