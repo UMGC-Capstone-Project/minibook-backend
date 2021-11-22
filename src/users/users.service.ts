@@ -17,21 +17,26 @@ export class UsersService {
         private readonly userRepository: Repository<UserEntity>,
     ) { }
 
-    async create(data: UserCreateDto): Promise<UserDto> {
-        const { displayname, email, password } = data;
-        const isExists = await this.findByEmail(email);
+    async create(userCreateDto: UserCreateDto): Promise<UserEntity> {
+        const user = new UserEntity();
+        user.displayname = userCreateDto.displayname;
+        user.email = userCreateDto.email;
+        user.password = userCreateDto.password;
+        return this.userRepository.save(user);
+        // const { displayname, email, password } = data;
+        // const isExists = await this.findByEmail(email);
 
-        if (isExists)
-            throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
+        // if (isExists)
+        //     throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
 
-        const user = this.userRepository.create({
-            displayname: displayname,
-            email: email,
-            password: password,
-        });
+        // const user = this.userRepository.create({
+        //     displayname: displayname,
+        //     email: email,
+        //     password: password,
+        // });
 
-        await this.userRepository.save(user);
-        return toUserDto(user);
+        // await this.userRepository.save(user);
+        // return toUserDto(user);
     }
 
     async findOne(options?: object): Promise<UserDto> {
@@ -57,7 +62,7 @@ export class UsersService {
 
     async findByLogin({ email, password }): Promise<UserDto> {
         const user = await this.findByEmail(email);
-
+        console.log("findbyLogin: " + email)
         if (!user)
             throw new HttpException('user not found', HttpStatus.UNAUTHORIZED);
 

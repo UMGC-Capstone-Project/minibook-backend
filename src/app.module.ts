@@ -3,8 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { NewsboardEntity } from './entity/newsboard.entity';
+import { PostEntity } from './entity/post.entity';
 import { UserEntity } from './entity/user.entity';
 import { UsersModule } from './users/users.module';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -18,12 +21,15 @@ import { UsersModule } from './users/users.module';
         database: "minibook_development",
         synchronize: true,
         entities: [
-          UserEntity
+          UserEntity,
+          NewsboardEntity,
+          PostEntity
         ]
       }
     ),
     AuthModule,
-    UsersModule
+    UsersModule,
+    PostsModule
   ],
   controllers: [AppController],
   providers: [AppService],

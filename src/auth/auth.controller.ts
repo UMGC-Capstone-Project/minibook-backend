@@ -1,6 +1,7 @@
-import { Controller, Post, UseGuards, Request, HttpCode, Body } from '@nestjs/common';
+import { Controller, Post, UseGuards, Request, HttpCode, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { UserCreateDto } from 'src/dto/UserCreateDto';
 import { UserLoginDto } from 'src/dto/UserLoginDto';
+import { UserRequest } from 'src/shared/decorator';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guard';
 
@@ -13,16 +14,17 @@ export class AuthController {
 
     @Post('register')
     async register(@Body() createUserDto: UserCreateDto) {
-        this.authService.register(createUserDto);
+        return this.authService.register(createUserDto);
     }
 
-    // @HttpCode(200)
+
     @Post('login')
+    @HttpCode(200)
     @UseGuards(LocalAuthGuard)
-    async login(@Body() userLoginDto: UserLoginDto) {
-        return this.authService.login(userLoginDto);
+    async login(@UserRequest() user) {
+        return this.authService.login(user);
     }
-    
+
     @Post('recover')
     recover(email: string) {
         throw new Error('Method not implemented.');

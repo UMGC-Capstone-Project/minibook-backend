@@ -1,5 +1,6 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { AfterInsert, BeforeInsert, Column, CreateDateColumn, Entity, getRepository, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import * as argon2 from "argon2";
+import { NewsboardEntity } from "./newsboard.entity";
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -36,8 +37,9 @@ export class UserEntity {
     // @OneToMany(type => FriendEntity, friend => friend.user)
     // friends: FriendEntity[];
 
-    // @OneToOne(type => NewsboardEntity, newsboard => newsboard.user)
-    // newsboard: NewsboardEntity;
+    @OneToOne(type => NewsboardEntity, newsboard => newsboard.user)
+    @JoinColumn()
+    newsboard: NewsboardEntity;
 
     // @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     // public created_at: Date;
@@ -54,5 +56,15 @@ export class UserEntity {
     @BeforeInsert()
     private async hashPassword() {
         this.password = await argon2.hash(this.password)
+    }
+
+    @AfterInsert()
+    async createNewsboard() {
+        const newsboardRepository = getRepository(NewsboardEntity);
+        const _newsboard = new NewsboardEntity();
+        _newsboard.isPublished = false;
+        _newsboard.user = this;
+        _newsboard.views = 0;
+        newsboardRepository.save(_newsboard);
     }
 }
