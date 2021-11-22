@@ -15,13 +15,13 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(
       {
-        type: "mysql",
-        host: process.env.DATABASE_HOST ,
+        type: "postgres",
+        host: process.env.DATABASE_HOST,
         port: parseInt(process.env.DATABASE_PORT, 10),
         username: process.env.DATABASE_USERNAME,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_DATABASE,
-        synchronize: true,
+        synchronize: Boolean(process.env.DATABASE_SYNCHRONIZE),
         entities: [
           UserEntity,
           NewsPostEntity,
