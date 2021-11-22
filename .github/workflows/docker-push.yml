@@ -8,6 +8,8 @@ name: Create and publish a Docker image
 on:
   push:
     branches: [ master ]
+    tags:
+      - "v*.*.*"
 
 env:
   REGISTRY: ghcr.io
@@ -42,41 +44,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: lowercase string
+      - name: Lowercase tags
         id: string
         uses: ASzc/change-string-case-action@v1
         with:
           string: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: lowercase string output
-        run: |
-          echo "${{ steps.string.outputs.lowercase }}"
-
-      - name: timestamp string
-        id: timestamp_string
-        uses: ASzc/change-string-case-action@v1
-        with:
-          string: ${{ steps.string.outputs.lowercase}}:$(date +%s)
-
-      - name: timestamp output
-        run: |
-          echo "${{ steps.timestamp_string.outputs.lowercase }}"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
           push: true
-          tags: |
-            ${{ steps.string.outputs.lowercase }}:latest
-            ${{ steps.string.outputs.lowercase }}:1.0.0
-          # labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.string.outputs.lowercase }}:latest
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
