@@ -1,21 +1,30 @@
-FROM node:16.13.0-alpine3.13
-
-LABEL maintainer="David C. Mydlarz <dmydlarz@student.umgc.edu>"
+FROM node:16.13.0-alpine3.13 AS development
 
 WORKDIR /usr/src/app
 
-ENV NODE_ENV=production
+COPY package*.json ./
 
-RUN apk update && \
-    apk add git
+RUN npm install glob rimraf
 
-RUN npm install -g @nestjs/cli
-RUN npm install -g ts-node
-RUN npm install
+RUN npm install --only=development
 
-COPY package.json /usr/src/app
-RUN npm ci --only=production && npm cache clean --force
-COPY . /usr/src/app
-# RUN git clone https://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@github.com/UMGC-Capstone-Project/minibook-backend.git /usr/src/app
+COPY . .
 
-EXPOSE 3000
+RUN npm run build
+
+FROM node:16.13.0-alpine3.13 as production
+
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install --only=production
+
+COPY . .
+
+COPY --from=development /usr/src/app/dist ./dist
+
+CMD ["npm", "run", "start:prod"]
