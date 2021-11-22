@@ -1,5 +1,6 @@
-import { UserDto } from "src/common/dto/UserDto";
-import { UserEntity } from "src/user/entities/user.entity";
+import { UserEntity } from "../user/entities/user.entity";
+import { UserDto } from "./dto/UserDto";
+
 
 export const toUserDto = (data: UserEntity): UserDto => {
     const { id, displayname, email } = data;

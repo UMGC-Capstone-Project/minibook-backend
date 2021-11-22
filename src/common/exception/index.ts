@@ -1,1 +1,0 @@
-export { NotFoundExceptionFilter } from './notfoundexception.filter'

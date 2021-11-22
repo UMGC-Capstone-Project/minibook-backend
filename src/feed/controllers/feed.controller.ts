@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, NotImplementedException, Post, Put, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guard';
-import { UserRequest } from 'src/common/decorator';
+import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import { UserRequest } from '../../common/decorator';
 import { FeedService } from '../services/feed.service';
 
 @Controller('feed')
@@ -8,7 +8,7 @@ export class FeedController {
 
     constructor(
         private readonly feedService: FeedService,
-    ) {}
+    ) { }
 
     @Get('/')
     @HttpCode(200)
@@ -16,7 +16,7 @@ export class FeedController {
     index(@UserRequest() user) {
         return this.feedService.findByAuthor(user.id)
     }
-    
+
     @Post()
     @HttpCode(200)
     @UseGuards(JwtAuthGuard)

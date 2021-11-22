@@ -1,8 +1,4 @@
-import { type } from "os";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { NewsPostEntity } from "./news-post.entity";
-
-
 
 @Entity({name: 'post'})
 export class PostEntity {
