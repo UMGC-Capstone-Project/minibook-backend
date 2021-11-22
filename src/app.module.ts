@@ -27,6 +27,7 @@ import configuration from './config/configuration';
         username: configService.get<string>('database.username'),
         password: configService.get<string>('database.password'),
         synchronize: configService.get<boolean>('database.synchronize'),
+        keepConnectionAlive: true,
         ssl: {
           ca: configService.get<string>('database.certificateAuthority'),
           rejectUnauthorized: false,
