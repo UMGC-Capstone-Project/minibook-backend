@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserCreateDto } from 'src/common/dto/UserCreateDto';
 import { UserDto } from 'src/common/dto/UserDto';
-import { toUserDto } from 'src/shared/mapper';
+import { toUserDto } from 'src/common/mapper';
 import { isPasswordMatching } from 'src/common/utils';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';

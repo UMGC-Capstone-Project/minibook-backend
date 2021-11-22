@@ -1,8 +1,8 @@
 import { Controller, Get, UseGuards, Request, Param, HttpException, HttpStatus, createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guard';
+import { UserRequest } from 'src/common/decorator';
 import { UserDto } from 'src/common/dto/UserDto';
-import { UserRequest } from 'src/shared/decorator';
-import { toUserDto } from 'src/shared/mapper';
+import { toUserDto } from 'src/common/mapper';
 import { UsersService } from '../services/users.service';
 
 @Controller('users')

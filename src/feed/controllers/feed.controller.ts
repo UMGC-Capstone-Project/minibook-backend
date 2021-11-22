@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, NotImplementedException, Post, Put, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guard';
-import { UserRequest } from 'src/shared/decorator';
+import { UserRequest } from 'src/common/decorator';
 import { FeedService } from '../services/feed.service';
 
 @Controller('feed')
