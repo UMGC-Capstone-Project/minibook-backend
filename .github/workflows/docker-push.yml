@@ -14,7 +14,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-image-test:
+  build-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
