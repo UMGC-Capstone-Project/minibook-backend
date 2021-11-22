@@ -48,8 +48,6 @@ xRa9OIeZ7iZzfhUNnqTTpecZadpTfYkWf/93uuN9j0Kq6PMJ+w==
         ssl: {
           ca: certKey
         },
-        dropSchema: false,
-        logging: true,
         synchronize: Boolean(process.env.DB_SYNCHRONIZE),
         entities: [
           UserEntity,
