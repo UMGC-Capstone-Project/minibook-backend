@@ -1,9 +1,28 @@
 name: minibook-backend
+
 services:
-- build_command: npm run build
-  environment_slug: node-js
-  github:
-    branch: master
-    deploy_on_push: true
-    repo: UMGC-Capstone-Project/minibook-backend
-  name: minibook-backend
+  - name: api
+    environment_slug: node-js
+    github:
+      branch: master
+      deploy_on_push: true
+      repo: UMGC-Capstone-Project/minibook-backend
+    build_command: npm run build
+    run_command: npm run start:prod
+    http_port: 3000
+    envs:
+      - key: API_URL
+        value: https://api.minibook.io/
+      - key: DB_CONNECTION_STRING
+        value: 
+      - key: DB_SYNCHRONIZE
+        value: true
+      - key: DATABASE_CA_CERT
+        value: 
+    routes:
+      - path: /
+    health_check:
+      http_path: /status
+    cors:
+      allow_origins:
+        - regex: .*
