@@ -47,18 +47,19 @@ jobs:
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      -
-        name: Tags output
+      
+      - name: Tags output
         run: |
           echo ${{ steps.meta.outputs.tags }}
           echo ${{ steps.meta.outputs.labels }}
 
-      - 
-        name: Lower case string output
+      - name: lowercase string
         id: string
         uses: ASzc/change-string-case-action@v1
         with:
           string: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$(date +%s)
+
+      - name: lowercase string output
         run: |
           echo "${{ steps.string.outputs.lowercase }}"
 
