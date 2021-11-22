@@ -12,7 +12,7 @@ services:
     http_port: 3000
     envs:
       - key: API_URL
-        value: https://api.minibook.io/
+        value: ${APP_URL}
       - key: DATABASE_HOST
         value: 
       - key: DATABASE_PORT
@@ -23,7 +23,7 @@ services:
         value: 
       - key: DATABASE_CA_CERT
         value: 
-      - key: DB_SYNCHRONIZE
+      - key: DATABASE_SYNCHRONIZE
         value: true
     routes:
       - path: /

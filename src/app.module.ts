@@ -8,54 +8,32 @@ import { UsersModule } from './user/users.module';
 import { FeedModule } from './feed/feed.module';
 import { PostEntity } from './feed/entities/post.entity';
 import { UserEntity } from './user/entities/user.entity';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HealthModule } from './health/health.module';
-
-const certKey = Buffer.from(`-----BEGIN CERTIFICATE-----
-MIIEQTCCAqmgAwIBAgIUJ+17wuTGyyBPcI4pySoJYjNwbbMwDQYJKoZIhvcNAQEM
-BQAwOjE4MDYGA1UEAwwvNWRlM2Y2YTYtNzI4YS00MDNmLTk4MzgtMWY4ZWRmZjFh
-M2RlIFByb2plY3QgQ0EwHhcNMjExMTIyMDkzMzM5WhcNMzExMTIwMDkzMzM5WjA6
-MTgwNgYDVQQDDC81ZGUzZjZhNi03MjhhLTQwM2YtOTgzOC0xZjhlZGZmMWEzZGUg
-UHJvamVjdCBDQTCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCCAYoCggGBALlegzSm
-x1V9eqHvZD7u9uuedQ+kDllSkq/exZMYvdhR3ZK4TyersmO9/3Js2ixP63QJWiBQ
-4a8rgnU4NFDtG5ektWt71P4UepANNlvngl8F0ANiI2t7h0iSHjWQ0FWVTNedBWg1
-tvbEPNWLD8grtrgp2xYkPE+8H5eR5Yab5cCE8ivhqD4ze1u6B/1AFStIYCeQ96Pa
-hKm0y1HKeJVSWdnxXT+4Ol3+N23xWDqWvSJtdJIbUyOLSoZygvia7qkf6/GT4uBU
-du46ftT4lx6rPCYnYWtK+d9Uo6cgZNCTxclwkMbZbjhuaxcWSyMm28TUiYe/VIcJ
-lSngIi1IMW7clGBxAlIGMsUDdlmahXsbkHRjvZUuiq9haI3wqeS0oyesr3JHerMY
-SoSNme6Wa4B82upMJmc+3WEQpiUhDh2PI+Tx3mZrFuEFyebU4g3W1zJPIvYqkbWn
-NyNKtB+5sF/7roql31FT468IOl5IKyuT5Ticu2Ukrfewy2BBywFWcifLEwIDAQAB
-oz8wPTAdBgNVHQ4EFgQUwX5YF/wS0mbsA6ZYRhRWNSAkTeowDwYDVR0TBAgwBgEB
-/wIBADALBgNVHQ8EBAMCAQYwDQYJKoZIhvcNAQEMBQADggGBAH59PGPGYW0Vx90m
-6jHOgbky/86fPkNyU5LOtfm9jLadP3MQ3bmIa/iwC2Q/cc8VtUAWgYsxcqWBtcht
-6/8HEugRXQfMH1vuMzOE/cea6/7GDH9HM26J7n1TlqzQaw5meHWNnhDfU4Y1joUu
-XvdVCamIBaER+rngA8AyCfSjUC7ETOzviwStgChg40O93isR1riCshfKbfweIbGc
-S5Ro2BntNCm0Dv281hEHLZ9DydP4RPwOFWlUyiepbU30zDA9pZQRWf635wi3kJio
-EjOsp72HFhlNQdF6CkHLxpTCq4GB5DPDMj//nps45OQXcqNOfnd2Wp3dnzp6RD+3
-Udj7deCC0xgI2qLo7o50Fp/ex7/so8/ekdvg0MRo/jUahL1M/p1MizSdg5ds7tu1
-22YYkePuCrCHiz6oSjgS2IEGUzoJPz2rZaC+3ilm6Vwmi8ctaKDgfb6ZO0xqhePO
-xRa9OIeZ7iZzfhUNnqTTpecZadpTfYkWf/93uuN9j0Kq6PMJ+w==
------END CERTIFICATE-----`);
+import configuration from './config/configuration';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      load: [configuration],
+    }),
     TypeOrmModule.forRootAsync({
-      useFactory: () => ({
-        name: 'default',
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
-        host: process.env.DATABASE_HOST,
-        port: parseInt(process.env.DATABASE_PORT, 0),
-        database: process.env.DATABASE_NAME,
-        username: process.env.DATABASE_USERNAME,
-        password: process.env.DATABASE_PASSWORD,
-        synchronize: Boolean(process.env.DB_SYNCHRONIZE),
-        logging: true,
+        host: configService.get<string>('database.host'),
+        port: configService.get<number>('database.port'),
+        database: configService.get<string>('database.name'),
+        username: configService.get<string>('database.username'),
+        password: configService.get<string>('database.password'),
+        synchronize: configService.get<boolean>('database.synchronize'),
         ssl: {
-          ca: certKey,
+          ca: configService.get<string>('database.certificateAuthority'),
+          rejectUnauthorized: false,
         },
         entities: [UserEntity, NewsPostEntity, PostEntity],
       }),
+      inject: [ConfigService],
     }),
     AuthModule,
     UsersModule,
