@@ -14,9 +14,12 @@ import { UserRequest } from 'src/common/decorator';
 import { LocalAuthGuard } from '../guard/local-auth.guard';
 import { UserCreateDto } from '../../common/dto/UserCreateDto';
 
-@Controller('auth')
+@Controller({
+  path: 'auth',
+  version: '1'
+})
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('register')
   async register(@Body() createUserDto: UserCreateDto) {

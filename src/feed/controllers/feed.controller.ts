@@ -14,9 +14,12 @@ import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
 import { FeedService } from '../services/feed.service';
 
-@Controller('feed')
+@Controller({
+  path: 'feed',
+  version: '1'
+})
 export class FeedController {
-  constructor(private readonly feedService: FeedService) {}
+  constructor(private readonly feedService: FeedService) { }
 
   @Get('/')
   @HttpCode(200)

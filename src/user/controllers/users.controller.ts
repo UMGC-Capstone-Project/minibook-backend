@@ -15,7 +15,10 @@ import { UserDto } from '../../common/dto/UserDto';
 import { toUserDto } from '../../common/mapper';
 import { UsersService } from '../services/users.service';
 
-@Controller('users')
+@Controller({
+  path: 'users',
+  version: '1'
+})
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

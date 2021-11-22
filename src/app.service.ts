@@ -6,8 +6,9 @@ import { PlatformStatus } from './common/enums/platform-status.enum';
 export class AppService {
   getRoot() {
     return {
-      status: PlatformStatus.ONLINE,
+      status: 200,
       timestamp: new Date().toISOString(),
+      message: 'minimalist'
     };
   }
 }
