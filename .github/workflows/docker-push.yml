@@ -6,20 +6,36 @@
 name: Create and publish a Docker image
 
 on:
+  schedule:
+    - cron: '0 10 * * *' # everyday at 10am
   push:
-    branches: [ master ]
+    branches:
+      - '**'
+    tags:
+      - 'v*.*.*'
+  pull_request:
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-push-image:
+  build-image-test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        run: docker build . --file Dockerfile --tag minibook-api:$(date +%s)
+        
+  push-image:
+    needs: build-image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -42,5 +58,11 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$(date +%s)
+          # tags: ${{ steps.meta.outputs.tags }}
+          # labels: ${{ steps.meta.outputs.labels }}
+      -
+        name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
