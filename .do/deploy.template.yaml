@@ -1,0 +1,9 @@
+spec:
+  name: minibook-backend
+  services:
+  - build_command: npm run build
+    environment_slug: node-js
+    git:
+      branch: master
+      repo_clone_url: https://github.com/UMGC-Capstone-Project/minibook-backend.git
+    name: minibook-backend

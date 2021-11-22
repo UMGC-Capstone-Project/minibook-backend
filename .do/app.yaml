@@ -1,0 +1,9 @@
+name: minibook-backend
+services:
+- build_command: npm run build
+  environment_slug: node-js
+  github:
+    branch: master
+    deploy_on_push: true
+    repo: UMGC-Capstone-Project/minibook-backend
+  name: minibook-backend
