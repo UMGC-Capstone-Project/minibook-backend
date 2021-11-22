@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserDto } from 'src/dto/UserDto';
-import { UsersService } from 'src/users/services/users.service';
+import { UserDto } from 'src/common/dto/UserDto';
+import { UsersService } from 'src/user/services/users.service';
 import { Repository } from 'typeorm';
 import { NewsPostEntity } from '../entities/news-post.entity';
 

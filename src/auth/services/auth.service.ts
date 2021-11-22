@@ -1,14 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthenticationPayload } from 'src/dto/AuthenticationPayload';
-import { AccessTokenPayload } from 'src/dto/AccessTokenPayload';
-import { UserCreateDto } from 'src/dto/UserCreateDto';
-import { UserDto } from 'src/dto/UserDto';
-import { isPasswordMatching } from 'src/shared/utils';
+import { AuthenticationPayload } from 'src/common/dto/AuthenticationPayload';
+import { AccessTokenPayload } from 'src/common/dto/AccessTokenPayload';
+import { UserCreateDto } from 'src/common/dto/UserCreateDto';
+import { UserDto } from 'src/common/dto/UserDto';
+import { isPasswordMatching } from 'src/common/utils';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserEntity } from 'src/users/entities/user.entity';
-import { User } from 'src/users/services/users.service';
+import { UserEntity } from 'src/user/entities/user.entity';
+import { User } from 'src/user/services/users.service';
 
 @Injectable()
 export class AuthService {

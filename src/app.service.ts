@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as moment from 'moment';
-import { PlatformStatus } from './enums';
+import { PlatformStatus } from './common/enums';
 
 @Injectable()
 export class AppService {

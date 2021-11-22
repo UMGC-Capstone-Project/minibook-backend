@@ -1,5 +1,5 @@
+import { UserEntity } from "src/user/entities/user.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { UserEntity } from "./user.entity";
 
 @Entity({ name: 'news-post' })
 export class NewsPostEntity {

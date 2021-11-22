@@ -1,7 +1,6 @@
 import { Controller, Get, UseGuards, Request, Param, HttpException, HttpStatus, createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guard';
-import { UserDto } from 'src/dto/UserDto';
-import { UserRequestDto } from 'src/dto/UserRequestDto';
+import { UserDto } from 'src/common/dto/UserDto';
 import { UserRequest } from 'src/shared/decorator';
 import { toUserDto } from 'src/shared/mapper';
 import { UsersService } from '../services/users.service';
@@ -17,7 +16,7 @@ export class UsersController {
     @Get('/')
     async index(@UserRequest() user): Promise<any> {
         console.log("index: " + JSON.stringify(user));
-
+ 
         if(!user)
             throw new HttpException('user not found', HttpStatus.NOT_FOUND);
 
