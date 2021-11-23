@@ -8,9 +8,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new NotFoundExceptionFilter());
 
-  app.setGlobalPrefix("api", {
-    exclude: ['health', '']
-  });
+  // app.setGlobalPrefix("api", {
+  //   exclude: ['health', '']
+  // });
   
   app.enableVersioning({
     type: VersioningType.URI,
