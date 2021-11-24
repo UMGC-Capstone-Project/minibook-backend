@@ -10,7 +10,7 @@ import { PostEntity } from './feed/entities/post.entity';
 import { UserEntity } from './user/entities/user.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HealthModule } from './health/health.module';
-import { FriendsModule } from './friends/friends.module';
+import { FriendsModule } from './friend/friends.module';
 import configuration from './config/configuration';
 
 @Module({

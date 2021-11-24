@@ -8,7 +8,7 @@ import {
 
 @Controller({
   path: 'health',
-  version: VERSION_NEUTRAL
+  version: VERSION_NEUTRAL,
 })
 export class HealthController {
   constructor(

@@ -16,10 +16,10 @@ import { FeedService } from '../services/feed.service';
 
 @Controller({
   path: 'feed',
-  version: '1'
+  version: '1',
 })
 export class FeedController {
-  constructor(private readonly feedService: FeedService) { }
+  constructor(private readonly feedService: FeedService) {}
 
   @Get('/')
   @HttpCode(200)

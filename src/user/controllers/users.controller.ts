@@ -17,7 +17,7 @@ import { UsersService } from '../services/users.service';
 
 @Controller({
   path: 'users',
-  version: '1'
+  version: '1',
 })
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

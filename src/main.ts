@@ -11,10 +11,10 @@ async function bootstrap() {
   // app.setGlobalPrefix("api", {
   //   exclude: ['health', '']
   // });
-  
+
   app.enableVersioning({
     type: VersioningType.URI,
-     defaultVersion: '1'
+    defaultVersion: '1',
   });
 
   const configService = app.get(ConfigService);

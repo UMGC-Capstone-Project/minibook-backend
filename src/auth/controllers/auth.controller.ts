@@ -16,10 +16,10 @@ import { UserCreateDto } from '../../common/dto/UserCreateDto';
 
 @Controller({
   path: 'auth',
-  version: '1'
+  version: '1',
 })
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
   async register(@Body() createUserDto: UserCreateDto) {
