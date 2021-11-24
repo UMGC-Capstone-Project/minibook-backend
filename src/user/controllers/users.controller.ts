@@ -46,7 +46,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/user/profile')
+  @Get('profile')
   async profile(@Request() req): Promise<any> {
     console.log(req.user);
     return req.user;
