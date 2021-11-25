@@ -72,7 +72,7 @@ export class FileUploadService extends S3Bucket {
     file: Express.Multer.File,
     filename: string,
   ): Promise<{ filename: string; location: string }> {
-    return await this.upload(file, filename, SUPPORTED_ACL_TYPE.PUBLIC_READ);
+    return await this.upload(file, filename, SUPPORTED_ACL_TYPE.PRIVATE);
   }
 
   async uploadPublic(
