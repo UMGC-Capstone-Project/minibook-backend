@@ -8,12 +8,21 @@ import {
   HttpStatus,
   createParamDecorator,
   ExecutionContext,
+  UploadedFile,
+  Post,
+  UseInterceptors,
+  Body,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
 import { UserDto } from '../../common/dto/UserDto';
 import { toUserDto } from '../../common/mapper';
 import { UsersService } from '../services/users.service';
+
+export class SampleDto {
+  name: string;
+}
 
 @Controller({
   path: 'users',
@@ -23,7 +32,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('/')
+  @Get()
   async index(@UserRequest() user): Promise<any> {
     console.log('index: ' + JSON.stringify(user));
 
@@ -32,6 +41,19 @@ export class UsersController {
     // const _user = await this.usersService.findById(user.id);
     // const _newsboard = _user.newsboard.posts;
     return user;
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(
+    @Body() body: SampleDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    console.log(file)
+    return {
+      body,
+      file: file.buffer.toString()
+    }
   }
 
   @Get(':id')
@@ -46,7 +68,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('profile')
+  @Get(':id/profile')
   async profile(@Request() req): Promise<any> {
     console.log(req.user);
     return req.user;

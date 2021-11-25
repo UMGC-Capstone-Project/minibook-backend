@@ -10,7 +10,6 @@ import { PostEntity } from './feed/entities/post.entity';
 import { UserEntity } from './user/entities/user.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HealthModule } from './health/health.module';
-import { FriendsModule } from './friend/friends.module';
 import { ChatModule } from './chat/chat.module';
 import configuration from './config/configuration';
 
@@ -42,7 +41,6 @@ import configuration from './config/configuration';
     UsersModule,
     FeedModule,
     HealthModule,
-    FriendsModule,
     ChatModule,
   ],
   controllers: [AppController],
