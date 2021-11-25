@@ -16,7 +16,6 @@ import { Socket, Server } from 'socket.io';
   },
 })
 export class ChatGateway {
-
   @WebSocketServer()
   server: Server;
   private logger: Logger = new Logger('ChatGateway');

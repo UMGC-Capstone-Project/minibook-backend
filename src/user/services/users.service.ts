@@ -9,16 +9,10 @@ import { UserEntity } from '../entities/user.entity';
 
 export type User = any;
 
-const supportImageMimeTypes = [
-  'image/jpg',
-  'image/jpeg',
-  'image/png',
-]
-
+const supportImageMimeTypes = ['image/jpg', 'image/jpeg', 'image/png'];
 
 @Injectable()
 export class UsersService {
-  
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,

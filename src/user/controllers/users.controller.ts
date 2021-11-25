@@ -32,8 +32,10 @@ export class SampleDto {
 })
 @ApiTags('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService,
-    private readonly fileUploadService: FileUploadService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly fileUploadService: FileUploadService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -48,11 +50,9 @@ export class UsersController {
   }
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file' ))
+  @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
-  async uploadFile(
-    @UploadedFile() file: Express.Multer.File,
-  ) {
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
     return await this.fileUploadService.uploadPublic(file, 'avatar');
   }
 

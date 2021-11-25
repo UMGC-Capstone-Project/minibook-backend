@@ -16,7 +16,6 @@ import { Socket, Server } from 'socket.io';
   },
 })
 export class FeedGateway {
-
   @WebSocketServer()
   server: Server;
   private logger: Logger = new Logger('FeedGateway');
@@ -27,9 +26,9 @@ export class FeedGateway {
 
   handleConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
-    client.on('room', function(room) {
+    client.on('room', function (room) {
       client.join(room);
-  });
+    });
   }
 
   handleDisconnect(client: Socket) {
@@ -43,7 +42,9 @@ export class FeedGateway {
 
   @SubscribeMessage('events')
   findAll(@MessageBody() data: any): Observable<WsResponse<number>> {
-    return from([1, 2, 3]).pipe(map(item => ({ event: 'events', data: item })));
+    return from([1, 2, 3]).pipe(
+      map((item) => ({ event: 'events', data: item })),
+    );
   }
 
   @SubscribeMessage('identity')
