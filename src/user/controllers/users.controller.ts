@@ -14,10 +14,12 @@ import {
   Body,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
 import { UserDto } from '../../common/dto/UserDto';
 import { toUserDto } from '../../common/mapper';
+import { FileUploadService } from '../services/fileupload.service';
 import { UsersService } from '../services/users.service';
 
 export class SampleDto {
@@ -28,8 +30,10 @@ export class SampleDto {
   path: 'users',
   version: '1',
 })
+@ApiTags('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService,
+    private readonly fileUploadService: FileUploadService) {}
 
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -44,16 +48,12 @@ export class UsersController {
   }
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('file' ))
+  @ApiConsumes('multipart/form-data')
   async uploadFile(
-    @Body() body: SampleDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log(file)
-    return {
-      body,
-      file: file.buffer.toString()
-    }
+    return await this.fileUploadService.uploadPublic(file, 'avatar');
   }
 
   @Get(':id')
