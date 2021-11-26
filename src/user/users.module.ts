@@ -10,7 +10,10 @@ import { PublicFileEntity } from '../file/entities/public-file.entity';
 import { FileModule } from 'src/file/file.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity, PublicFileEntity]), FileModule],
+  imports: [
+    TypeOrmModule.forFeature([UserEntity, PublicFileEntity]),
+    FileModule,
+  ],
   providers: [UsersService, FriendsService],
   exports: [UsersService, TypeOrmModule],
   controllers: [UsersController, FriendsController],

@@ -1,6 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { AbstractWsAdapter } from '@nestjs/websockets';
-
+import { HttpException, Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import * as AWS from 'aws-sdk';
 import { S3 } from 'aws-sdk';
@@ -71,6 +69,7 @@ export class FileService extends S3Bucket {
     file: Express.Multer.File,
     acl: SUPPORTED_ACL_TYPE,
   ) {
+    if (!file) throw new HttpException('no file has been sent', 400);
     const params: S3.Types.PutObjectRequest = this.createS3UploadParams(
       userId,
       file,
@@ -91,8 +90,9 @@ export class FileService extends S3Bucket {
     const params: S3.Types.PutObjectRequest = {
       Bucket: this.bucketEndpoint,
       Body: fileBuffer.buffer,
-      Key: `${this.createUserFilePath(userId)}/${uuid()}.${MIME_TYPE_MAP[fileBuffer.mimetype]
-        }`,
+      Key: `${this.createUserFilePath(userId)}/${uuid()}.${
+        MIME_TYPE_MAP[fileBuffer.mimetype]
+      }`,
       ACL: acl,
     };
     return params;
@@ -111,6 +111,7 @@ export class FileService extends S3Bucket {
     files: Array<Express.Multer.File>,
     acl: SUPPORTED_ACL_TYPE,
   ) {
+    if (files.length < 1) throw new HttpException('no file has been sent', 400);
     const response = [];
     // we use a modern for loop here *forEach* had an issue resulting in a race condiction.
     for (const file of files) {

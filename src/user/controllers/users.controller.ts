@@ -15,7 +15,7 @@ import {
   UploadedFiles,
 } from '@nestjs/common';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileService } from 'src/file/services/file.service';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
@@ -34,7 +34,6 @@ export class SampleDto {
 @ApiTags('users')
 @ApiBearerAuth()
 export class UsersController {
-  
   constructor(
     private readonly usersService: UsersService,
     private readonly fileUploadService: FileService,
@@ -56,6 +55,17 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   async addAvatar(
     @UserRequest() user,
     @UploadedFile() file: Express.Multer.File,

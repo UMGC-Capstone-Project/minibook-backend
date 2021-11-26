@@ -71,7 +71,7 @@ export class AuthController {
 
   @Post('recover')
   @HttpCode(200)
-  @ApiResponse({status: 200, type: UserRecoveryResponseDto})
+  @ApiResponse({ status: 200, type: UserRecoveryResponseDto })
   recover(
     @Body() userRecoveryRequestDto: UserRecoveryRequestDto,
   ): Promise<UserRecoveryResponseDto> {

@@ -10,6 +10,6 @@ import { FileService } from './services/file.service';
   imports: [TypeOrmModule.forFeature([PublicFileEntity])],
   controllers: [FileController],
   providers: [FileService],
-  exports: [FileService, TypeOrmModule]
+  exports: [FileService, TypeOrmModule],
 })
 export class FileModule {}
