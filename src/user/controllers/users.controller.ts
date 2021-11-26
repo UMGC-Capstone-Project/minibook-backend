@@ -12,8 +12,9 @@ import {
   Post,
   UseInterceptors,
   Body,
+  UploadedFiles,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
@@ -35,7 +36,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly fileUploadService: FileUploadService,
-  ) {}
+  ) { }
 
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -54,6 +55,13 @@ export class UsersController {
   @ApiConsumes('multipart/form-data')
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
     return await this.fileUploadService.uploadPublic(file, 'avatar');
+  }
+
+  @Post('uploads')
+  @UseInterceptors(AnyFilesInterceptor())
+  @ApiConsumes('multipart/form-data')
+  async uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
+    return await this.fileUploadService.uploadMultiPublic(files);
   }
 
   @Get(':id')
