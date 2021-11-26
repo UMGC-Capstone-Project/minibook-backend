@@ -34,6 +34,7 @@ export class SampleDto {
 @ApiTags('users')
 @ApiBearerAuth()
 export class UsersController {
+  
   constructor(
     private readonly usersService: UsersService,
     private readonly fileUploadService: FileService,
@@ -49,28 +50,6 @@ export class UsersController {
     // const _user = await this.usersService.findById(user.id);
     // const _newsboard = _user.newsboard.posts;
     return user;
-  }
-
-  @Post('upload')
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiConsumes('multipart/form-data')
-  async uploadFile(
-    @UserRequest() user,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    return await this.fileUploadService.uploadPublic(user.id, file);
-  }
-
-  @Post('uploads')
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(AnyFilesInterceptor())
-  @ApiConsumes('multipart/form-data')
-  async uploadFiles(
-    @UserRequest() user,
-    @UploadedFiles() files: Array<Express.Multer.File>,
-  ) {
-    return await this.fileUploadService.uploadMultiPublic(user.id, files);
   }
 
   @Post('avatar')

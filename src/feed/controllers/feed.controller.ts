@@ -10,6 +10,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
 import { FeedService } from '../services/feed.service';
@@ -18,6 +19,8 @@ import { FeedService } from '../services/feed.service';
   path: 'feed',
   version: '1',
 })
+@ApiTags('feed')
+@ApiBearerAuth()
 export class FeedController {
   constructor(private readonly feedService: FeedService) {}
 

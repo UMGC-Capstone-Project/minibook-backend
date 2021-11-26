@@ -1,10 +1,13 @@
 import { Controller, Get, NotImplementedException } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { FriendsService } from '../services/friend.service';
 
 @Controller({
   path: 'friends',
   version: '1',
 })
+@ApiTags('friends')
+@ApiBearerAuth()
 export class FriendsController {
   constructor(private readonly friendService: FriendsService) {}
 
