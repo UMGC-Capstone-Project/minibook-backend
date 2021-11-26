@@ -27,12 +27,11 @@ export enum SUPPORTED_ACL_TYPE {
 
 @Injectable()
 export class FileUploadService extends S3Bucket {
-    publicBucket: string;
-    privateBucket: string;
+    bucketEndpoint: string;
 
     constructor() {
         super();
-        this.publicBucket = 'minibook-images';
+        this.bucketEndpoint = 'minibook-images';
         // TODO: move out to nestjs config service
         console.log(process.env.S3_ENDPOINT);
         this.endpoint = new AWS.Endpoint(process.env.S3_ENDPOINT);
@@ -52,20 +51,30 @@ export class FileUploadService extends S3Bucket {
         throw new Error('Method not implemented.');
     }
 
+    // TODO: We might combine this into just one function upload(s).
     async upload(user: UserEntity, file: Express.Multer.File, acl: SUPPORTED_ACL_TYPE) {
-        const results = await this.s3
-            .upload({
-                Bucket: this.publicBucket,
-                Body: file.buffer,
-                Key: `${uuid()}.${MIME_TYPE_MAP[file.mimetype]}`,
-                ACL: acl,
-            })
-            .promise();
+        let params: S3.Types.PutObjectRequest = this.createS3Params(user, file, acl);
+
+        const results = await this.s3.upload(params).promise();
 
         return {
             filename: results.Key,
             location: results.Location,
         };
+    }
+
+    createUserFilePath(user: UserEntity) {
+        return `${user.id}/Photos`
+    }
+
+    createS3Params(user, fileBuffer, acl): S3.Types.PutObjectRequest{
+        let params: S3.Types.PutObjectRequest = {
+            Bucket: this.bucketEndpoint,
+            Body: fileBuffer.buffer,
+            Key: `${this.createUserFilePath(user)}/${uuid()}.${MIME_TYPE_MAP[fileBuffer.mimetype]}`,
+            ACL: acl,
+        }
+        return params;
     }
 
     async uploads(user: UserEntity,files: Array<Express.Multer.File>,acl: SUPPORTED_ACL_TYPE,){
@@ -75,16 +84,8 @@ export class FileUploadService extends S3Bucket {
             const result: PhotoResponseDto = {
                 success: null
             }
-
-            let params: S3.Types.PutObjectRequest = {
-                Bucket: this.publicBucket,
-                Body: file.buffer,
-                Key: `${uuid()}.${MIME_TYPE_MAP[file.mimetype]}`,
-                ACL: acl,
-            }
-
+            let params: S3.Types.PutObjectRequest = this.createS3Params(user, file, acl);
             let options: ManagedUpload.ManagedUploadOptions = {}
-
             let upload = this.s3.upload(params, options).on('httpUploadProgress', (process) => {
                 // TODO: figure out if we can transfer the progress back to the client some how this might require an websocket for progression transfer.
                 console.log(process);
