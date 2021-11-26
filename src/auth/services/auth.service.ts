@@ -15,6 +15,7 @@ import { UserRecoveryResponseDto } from '../dto/UserRecoveryResponseDto';
 import { UserRecoveryRequestDto } from '../dto/UserRecoveryRequestDto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { UserCreateResponseDto } from 'src/user/dto/UserCreateResponseDto';
+import { triggerAsyncId } from 'async_hooks';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,7 @@ export class AuthService {
     private readonly userRepository: Repository<UserEntity>,
     private readonly jwtService: JwtService,
     private readonly mailerService: MailerService,
-  ) {}
+  ) { }
 
   public async register(data: UserCreateRequestDto): Promise<any> {
     if (await this.isUserExists(data.email))
@@ -32,27 +33,15 @@ export class AuthService {
     const user = await this.userRepository.create(data);
     await this.userRepository.save(user);
     const { password, ...result } = user;
-    this.sendEmail(user);
+    this.sendEmail(
+      user.email,
+      'index',
+      'Welcome to MiniBook.io!',
+      {
+        username: user.displayname,
+        code: 'cf1a3f828287',
+      });
     return result;
-  }
-
-  sendEmail(user: UserEntity) {
-    console.log(process.cwd() + '/template/' + 'index.hbs');
-    console.log(__dirname + '/index');
-    this.mailerService
-      .sendMail({
-        to: user.email,
-        from: 'noreply@minibook.io',
-        subject: 'Welcome to MiniBook.io!',
-        template: process.cwd() + '/template/' + 'index',
-        context: {
-          // Data to be sent to template engine.
-          code: 'cf1a3f828287',
-          username: user.displayname,
-        },
-      })
-      .then((success) => console.log(success))
-      .catch((err) => console.log(err));
   }
 
   // Local Strategy -> Validate User -> Login -> AccessTokenPayload
@@ -65,12 +54,27 @@ export class AuthService {
     };
   }
 
+  // we don't really care if the email is there or not just always return sucessful => true.
+  // this is more for security seeing that user(s) could be fishing for accounts.
   async recover(
     data: UserRecoveryRequestDto,
   ): Promise<UserRecoveryResponseDto> {
-    return {
-      successful: false,
-    };
+    const { email } = data;
+    const response: UserRecoveryResponseDto = {
+      successful: true,
+    }
+    const user = await this.userRepository.findOne({ where: { email: email } });
+    if (!user) return response;
+    this.sendEmail(
+      user.email,
+      'recover',
+      'Recover MiniBook.io Account!',
+      {
+        displayName: user.displayname,
+        email: user.email,
+        code: 'cf1a3f828287',
+      });
+    return response;
   }
 
   // ## Helpers ##
@@ -100,5 +104,18 @@ export class AuthService {
       email: data.email,
       id: data.id,
     };
+  }
+
+  sendEmail(_email: string, _template: string, _subject: string, _context: { [name: string]: any; }) {
+    this.mailerService
+      .sendMail({
+        to: _email,
+        from: 'noreply@minibook.io',
+        subject: _subject,
+        template: process.cwd() + '/template/' + _template,
+        context: _context,
+      })
+      .then((success) => console.log(success))
+      .catch((err) => console.log(err));
   }
 }
