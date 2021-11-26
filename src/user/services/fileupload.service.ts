@@ -6,6 +6,8 @@ import { v4 as uuid } from 'uuid';
 import * as AWS from 'aws-sdk';
 import { S3 } from 'aws-sdk';
 import { ManagedUpload } from 'aws-sdk/clients/s3';
+import { User } from './users.service';
+import { UserEntity } from '../entities/user.entity';
 
 const MIME_TYPE_MAP = {
     'image/png': 'png',
@@ -50,16 +52,12 @@ export class FileUploadService extends S3Bucket {
         throw new Error('Method not implemented.');
     }
 
-    async upload(
-        file: Express.Multer.File,
-        filename: string,
-        acl: SUPPORTED_ACL_TYPE,
-    ): Promise<{ filename: string; location: string }> {
+    async upload(user: UserEntity, file: Express.Multer.File, acl: SUPPORTED_ACL_TYPE) {
         const results = await this.s3
             .upload({
                 Bucket: this.publicBucket,
                 Body: file.buffer,
-                Key: `${uuid()}--${filename}.${MIME_TYPE_MAP[file.mimetype]}`,
+                Key: `${uuid()}.${MIME_TYPE_MAP[file.mimetype]}`,
                 ACL: acl,
             })
             .promise();
@@ -70,25 +68,9 @@ export class FileUploadService extends S3Bucket {
         };
     }
 
-    async uploadPrivate(
-        file: Express.Multer.File,
-        filename: string,
-    ): Promise<{ filename: string; location: string }> {
-        return await this.upload(file, filename, SUPPORTED_ACL_TYPE.PRIVATE);
-    }
-
-    async uploadPublic(
-        file: Express.Multer.File,
-        filename: string,
-    ): Promise<{ filename: string; location: string }> {
-        return await this.upload(file, filename, SUPPORTED_ACL_TYPE.PUBLIC_READ);
-    }
-
-    async uploads(
-        files: Array<Express.Multer.File>,
-        acl: SUPPORTED_ACL_TYPE,
-    ): Promise<any[]> {
+    async uploads(user: UserEntity,files: Array<Express.Multer.File>,acl: SUPPORTED_ACL_TYPE,){
         const response = [];
+        // we use a modern for loop here *forEach* had an issue resulting in a race condiction. 
         for (const file of files) {
             const result: PhotoResponseDto = {
                 success: null
@@ -104,6 +86,7 @@ export class FileUploadService extends S3Bucket {
             let options: ManagedUpload.ManagedUploadOptions = {}
 
             let upload = this.s3.upload(params, options).on('httpUploadProgress', (process) => {
+                // TODO: figure out if we can transfer the progress back to the client some how this might require an websocket for progression transfer.
                 console.log(process);
             }).promise()
 
@@ -111,7 +94,7 @@ export class FileUploadService extends S3Bucket {
                 result.file = data.Key;
                 result.location = data.Location;
                 result.success = true;
-            }, (err) => {
+            }, (err: Error) => {
                 result.success = false;
             });
 
@@ -120,11 +103,17 @@ export class FileUploadService extends S3Bucket {
         return response;
     }
 
-    async uploadMultiPublic(files: Array<Express.Multer.File>) {
-        return this.uploads(files, SUPPORTED_ACL_TYPE.PUBLIC_READ);
+    async uploadPublic(user: UserEntity, file: Express.Multer.File) {
+        return await this.upload(user, file, SUPPORTED_ACL_TYPE.PUBLIC_READ);
     }
-    async uploadMultiPrivate(files: Array<Express.Multer.File>) {
-        return this.uploads(files, SUPPORTED_ACL_TYPE.PRIVATE);
+    async uploadPrivate(user: UserEntity, file: Express.Multer.File) {
+        return await this.upload(user, file, SUPPORTED_ACL_TYPE.PRIVATE);
+    }
+    async uploadMultiPublic(user: UserEntity, files: Array<Express.Multer.File>) {
+        return this.uploads(user, files, SUPPORTED_ACL_TYPE.PUBLIC_READ)
+    }
+    async uploadMultiPrivate(user: UserEntity, files: Array<Express.Multer.File>) {
+        return this.uploads(user, files, SUPPORTED_ACL_TYPE.PRIVATE);
     }
 
     async manageAccess(location: string, acl: SUPPORTED_ACL_TYPE) {

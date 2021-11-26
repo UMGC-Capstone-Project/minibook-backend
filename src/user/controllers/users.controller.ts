@@ -51,17 +51,19 @@ export class UsersController {
   }
 
   @Post('upload')
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    return await this.fileUploadService.uploadPublic(file, 'avatar');
+  async uploadFile(@UserRequest() user, @UploadedFile() file: Express.Multer.File) {
+    return await this.fileUploadService.uploadPublic(user, file);
   }
 
   @Post('uploads')
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(AnyFilesInterceptor())
   @ApiConsumes('multipart/form-data')
-  async uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
-    return await this.fileUploadService.uploadMultiPublic(files);
+  async uploadFiles(@UserRequest() user, @UploadedFiles() files: Array<Express.Multer.File>) {
+    return await this.fileUploadService.uploadMultiPublic(user, files);
   }
 
   @Get(':id')

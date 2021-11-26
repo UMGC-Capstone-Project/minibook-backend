@@ -1,19 +1,16 @@
 import { Endpoint, S3, Credentials } from 'aws-sdk';
+import { UserEntity } from '../entities/user.entity';
+import { SUPPORTED_ACL_TYPE } from '../services/fileupload.service';
 
 export abstract class S3Bucket {
   protected endpoint: Endpoint;
   protected s3: S3;
   protected credentials: Credentials;
-  abstract uploadPublic(
-    file: Express.Multer.File,
-    filename: string,
-  ): Promise<{ filename: string; location: string }>;
-  // abstract uploadMultiPublic(files:  Array<Express.Multer.File>);
-  abstract uploadMultiPublic(files:  Array<Express.Multer.File>)
-  abstract uploadPrivate(
-    file: Express.Multer.File,
-    filename: string,
-  ): Promise<{ filename: string; location: string }>;
-  abstract uploadMultiPrivate(files:  Array<Express.Multer.File>);
+  abstract upload(user: UserEntity, file: Express.Multer.File, acl: SUPPORTED_ACL_TYPE);
+  abstract uploads(user: UserEntity, files: Array<Express.Multer.File>, acl: SUPPORTED_ACL_TYPE);
+  abstract uploadPublic(user: UserEntity, file: Express.Multer.File);
+  abstract uploadPrivate(user: UserEntity, file: Express.Multer.File);
+  abstract uploadMultiPublic(user: UserEntity, files: Array<Express.Multer.File>)
+  abstract uploadMultiPrivate(user: UserEntity, files: Array<Express.Multer.File>);
   abstract getS3();
 }
