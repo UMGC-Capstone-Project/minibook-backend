@@ -8,11 +8,12 @@ export abstract class S3Bucket {
     file: Express.Multer.File,
     filename: string,
   ): Promise<{ filename: string; location: string }>;
-  abstract uploadMultiPublic();
+  // abstract uploadMultiPublic(files:  Array<Express.Multer.File>);
+  abstract uploadMultiPublic(files:  Array<Express.Multer.File>)
   abstract uploadPrivate(
     file: Express.Multer.File,
     filename: string,
   ): Promise<{ filename: string; location: string }>;
-  abstract uploadMultiPrivate();
+  abstract uploadMultiPrivate(files:  Array<Express.Multer.File>);
   abstract getS3();
 }
