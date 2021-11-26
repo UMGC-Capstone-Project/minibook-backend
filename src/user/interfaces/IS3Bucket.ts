@@ -6,11 +6,12 @@ export abstract class S3Bucket {
   protected endpoint: Endpoint;
   protected s3: S3;
   protected credentials: Credentials;
-  abstract upload(user: UserEntity, file: Express.Multer.File, acl: SUPPORTED_ACL_TYPE);
-  abstract uploads(user: UserEntity, files: Array<Express.Multer.File>, acl: SUPPORTED_ACL_TYPE);
-  abstract uploadPublic(user: UserEntity, file: Express.Multer.File);
-  abstract uploadPrivate(user: UserEntity, file: Express.Multer.File);
-  abstract uploadMultiPublic(user: UserEntity, files: Array<Express.Multer.File>)
-  abstract uploadMultiPrivate(user: UserEntity, files: Array<Express.Multer.File>);
-  abstract getS3();
+  abstract upload(userId: number, file: Express.Multer.File, acl: SUPPORTED_ACL_TYPE);
+  abstract uploads(userId: number, files: Array<Express.Multer.File>, acl: SUPPORTED_ACL_TYPE);
+  abstract uploadPublic(userId: number, file: Express.Multer.File);
+  abstract uploadPrivate(userId: number, file: Express.Multer.File);
+  abstract uploadMultiPublic(userId: number, files: Array<Express.Multer.File>)
+  abstract uploadMultiPrivate(userId: number, files: Array<Express.Multer.File>);
+  abstract delete(userId, files: Array<any>);
+  abstract getS3(userId: number);
 }

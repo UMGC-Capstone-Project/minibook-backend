@@ -6,8 +6,6 @@ import { v4 as uuid } from 'uuid';
 import * as AWS from 'aws-sdk';
 import { S3 } from 'aws-sdk';
 import { ManagedUpload } from 'aws-sdk/clients/s3';
-import { User } from './users.service';
-import { UserEntity } from '../entities/user.entity';
 
 const MIME_TYPE_MAP = {
     'image/png': 'png',
@@ -24,6 +22,9 @@ export enum SUPPORTED_ACL_TYPE {
     BUCKET_OWNER_READ = 'bucket-owner-read',
     BUCKET_OWNER_FULL_CONTROL = 'bucket-owner-full-control',
 }
+
+// TODO: Fix the DTO return objects
+//      Configuration Services
 
 @Injectable()
 export class FileUploadService extends S3Bucket {
@@ -47,44 +48,56 @@ export class FileUploadService extends S3Bucket {
         });
     }
 
-    getS3() {
+    getS3(user: number) {
         throw new Error('Method not implemented.');
     }
 
+    async addUserAvatar(userId: number, imageBuffer: Buffer, filename: string) {
+        // this.upload()
+    }
+
     // TODO: We might combine this into just one function upload(s).
-    async upload(user: UserEntity, file: Express.Multer.File, acl: SUPPORTED_ACL_TYPE) {
-        let params: S3.Types.PutObjectRequest = this.createS3Params(user, file, acl);
+    async upload(userId: number, file: Express.Multer.File, acl: SUPPORTED_ACL_TYPE) {
+        let params: S3.Types.PutObjectRequest = this.createS3UploadParams(userId, file, acl);
 
         const results = await this.s3.upload(params).promise();
 
         return {
-            filename: results.Key,
-            location: results.Location,
+            key: results.Key,
+            url: results.Location,
         };
     }
 
-    createUserFilePath(user: UserEntity) {
-        return `${user.id}/Photos`
+    createUserFilePath(userId: number) {
+        return `${userId}/Photos`
     }
 
-    createS3Params(user, fileBuffer, acl): S3.Types.PutObjectRequest{
+    createS3UploadParams(userId: number, fileBuffer, acl): S3.Types.PutObjectRequest {
         let params: S3.Types.PutObjectRequest = {
             Bucket: this.bucketEndpoint,
             Body: fileBuffer.buffer,
-            Key: `${this.createUserFilePath(user)}/${uuid()}.${MIME_TYPE_MAP[fileBuffer.mimetype]}`,
+            Key: `${this.createUserFilePath(userId)}/${uuid()}.${MIME_TYPE_MAP[fileBuffer.mimetype]}`,
             ACL: acl,
         }
         return params;
     }
 
-    async uploads(user: UserEntity,files: Array<Express.Multer.File>,acl: SUPPORTED_ACL_TYPE,){
+    createS3DeleteParams(fileKey): S3.Types.PutObjectRequest {
+        let params: S3.Types.PutObjectRequest = {
+            Bucket: this.bucketEndpoint,
+            Key: `${fileKey}`
+        }
+        return params;
+    }
+
+    async uploads(userId: number, files: Array<Express.Multer.File>, acl: SUPPORTED_ACL_TYPE,) {
         const response = [];
         // we use a modern for loop here *forEach* had an issue resulting in a race condiction. 
         for (const file of files) {
             const result: PhotoResponseDto = {
                 success: null
             }
-            let params: S3.Types.PutObjectRequest = this.createS3Params(user, file, acl);
+            let params: S3.Types.PutObjectRequest = this.createS3UploadParams(userId, file, acl);
             let options: ManagedUpload.ManagedUploadOptions = {}
             let upload = this.s3.upload(params, options).on('httpUploadProgress', (process) => {
                 // TODO: figure out if we can transfer the progress back to the client some how this might require an websocket for progression transfer.
@@ -92,8 +105,8 @@ export class FileUploadService extends S3Bucket {
             }).promise()
 
             await upload.then((data: ManagedUpload.SendData) => {
-                result.file = data.Key;
-                result.location = data.Location;
+                result.key = data.Key;
+                result.url = data.Location;
                 result.success = true;
             }, (err: Error) => {
                 result.success = false;
@@ -104,26 +117,32 @@ export class FileUploadService extends S3Bucket {
         return response;
     }
 
-    async uploadPublic(user: UserEntity, file: Express.Multer.File) {
-        return await this.upload(user, file, SUPPORTED_ACL_TYPE.PUBLIC_READ);
+    async uploadPublic(userId: number, file: Express.Multer.File) {
+        return await this.upload(userId, file, SUPPORTED_ACL_TYPE.PUBLIC_READ);
     }
-    async uploadPrivate(user: UserEntity, file: Express.Multer.File) {
-        return await this.upload(user, file, SUPPORTED_ACL_TYPE.PRIVATE);
+    async uploadPrivate(userId: number, file: Express.Multer.File) {
+        return await this.upload(userId, file, SUPPORTED_ACL_TYPE.PRIVATE);
     }
-    async uploadMultiPublic(user: UserEntity, files: Array<Express.Multer.File>) {
-        return this.uploads(user, files, SUPPORTED_ACL_TYPE.PUBLIC_READ)
+    async uploadMultiPublic(userId: number, files: Array<Express.Multer.File>) {
+        return this.uploads(userId, files, SUPPORTED_ACL_TYPE.PUBLIC_READ)
     }
-    async uploadMultiPrivate(user: UserEntity, files: Array<Express.Multer.File>) {
-        return this.uploads(user, files, SUPPORTED_ACL_TYPE.PRIVATE);
+    async uploadMultiPrivate(userId: number, files: Array<Express.Multer.File>) {
+        return this.uploads(userId, files, SUPPORTED_ACL_TYPE.PRIVATE);
     }
 
     async manageAccess(location: string, acl: SUPPORTED_ACL_TYPE) {
 
     }
+    
+    async delete(){
+        const paramas = this.createS3DeleteParams('2/Photos/8cedbf62-a603-493f-8cbc-c387a82d928f.jpg')
+        const results = await this.s3.deleteObject(paramas).promise();
+        return {};
+    }
 }
 
 type PhotoResponseDto = {
-    file?: string;
-    location?: string;
+    key?: string;
+    url?: string;
     success: boolean;
 }

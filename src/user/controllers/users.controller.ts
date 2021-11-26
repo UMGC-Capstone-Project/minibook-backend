@@ -55,7 +55,7 @@ export class UsersController {
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   async uploadFile(@UserRequest() user, @UploadedFile() file: Express.Multer.File) {
-    return await this.fileUploadService.uploadPublic(user, file);
+    return await this.fileUploadService.uploadPublic(user.id, file);
   }
 
   @Post('uploads')
@@ -63,7 +63,7 @@ export class UsersController {
   @UseInterceptors(AnyFilesInterceptor())
   @ApiConsumes('multipart/form-data')
   async uploadFiles(@UserRequest() user, @UploadedFiles() files: Array<Express.Multer.File>) {
-    return await this.fileUploadService.uploadMultiPublic(user, files);
+    return await this.fileUploadService.uploadMultiPublic(user.id, files);
   }
 
   @Get(':id')
