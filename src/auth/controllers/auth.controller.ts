@@ -13,10 +13,13 @@ import { UserRequest } from 'src/common/decorator';
 import { LocalAuthGuard } from '../guard/local-auth.guard';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
+  ApiHeader,
   ApiOkResponse,
   ApiResponse,
+  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 import { UserCreateRequestDto } from 'src/common/dto/UserCreateRequestDto';

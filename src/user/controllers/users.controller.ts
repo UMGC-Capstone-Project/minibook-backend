@@ -15,7 +15,7 @@ import {
   UploadedFiles,
 } from '@nestjs/common';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
 import { UserDto } from '../../common/dto/UserDto';
@@ -32,6 +32,7 @@ export class SampleDto {
   version: '1',
 })
 @ApiTags('users')
+@ApiBearerAuth()
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,

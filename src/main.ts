@@ -19,6 +19,7 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Minibook')
     .setDescription('The minibook API backend services')
     .setVersion('1.0')
