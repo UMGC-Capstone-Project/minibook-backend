@@ -36,10 +36,10 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly fileUploadService: FileService,
-  ) { }
+  ) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
+  @UseGuards(JwtAuthGuard)
   async index(@UserRequest() user): Promise<any> {
     console.log('index: ' + JSON.stringify(user));
 
@@ -54,7 +54,10 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
-  async uploadFile(@UserRequest() user, @UploadedFile() file: Express.Multer.File) {
+  async uploadFile(
+    @UserRequest() user,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     return await this.fileUploadService.uploadPublic(user.id, file);
   }
 
@@ -62,7 +65,10 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(AnyFilesInterceptor())
   @ApiConsumes('multipart/form-data')
-  async uploadFiles(@UserRequest() user, @UploadedFiles() files: Array<Express.Multer.File>) {
+  async uploadFiles(
+    @UserRequest() user,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
     return await this.fileUploadService.uploadMultiPublic(user.id, files);
   }
 
@@ -70,7 +76,10 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
-  async addAvatar(@UserRequest() user, @UploadedFile() file: Express.Multer.File) {
+  async addAvatar(
+    @UserRequest() user,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     return await this.usersService.addAvatar(user.id, file);
   }
 

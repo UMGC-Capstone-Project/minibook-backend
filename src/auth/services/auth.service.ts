@@ -2,13 +2,17 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticationPayload } from '../../common/dto/AuthenticationPayload';
 import { AccessTokenPayload } from '../../common/dto/AccessTokenPayload';
-import { UserCreateDto } from '../../common/dto/UserCreateDto';
+
 import { UserDto } from '../../common/dto/UserDto';
 import { isPasswordMatching } from '../../common/utils';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity';
 import { User } from '../../user/services/users.service';
+import { UserCreateRequestDto } from 'src/common/dto/UserCreateRequestDto';
+import { UserLoginResponseDto } from '../dto/UserLoginResponseDto';
+import { UserRecoveryResponseDto } from '../dto/UserRecoveryResponseDto';
+import { UserRecoveryRequestDto } from '../dto/UserRecoveryRequestDto';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +22,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  public async register(data: UserCreateDto): Promise<any> {
+  public async register(data: UserCreateRequestDto): Promise<any> {
     if (await this.isUserExists(data.email))
       throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
 
@@ -29,7 +33,7 @@ export class AuthService {
   }
 
   // Local Strategy -> Validate User -> Login -> AccessTokenPayload
-  public async login(user: any): Promise<AccessTokenPayload> {
+  public async login(user: any): Promise<UserLoginResponseDto> {
     const authenticationPayload = this.createAuthenticationPayload(user);
     const tokenPayload = await this.createToken(authenticationPayload);
 
@@ -38,8 +42,12 @@ export class AuthService {
     };
   }
 
-  recover(email: string) {
-    throw new Error('Method not implemented.');
+  async recover(
+    data: UserRecoveryRequestDto,
+  ): Promise<UserRecoveryResponseDto> {
+    return {
+      successful: false,
+    };
   }
 
   // ## Helpers ##

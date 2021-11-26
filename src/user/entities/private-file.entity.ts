@@ -1,8 +1,7 @@
-import { Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 class PrivateFileEntity {
-    @PrimaryGeneratedColumn()
-    public id: number;
-    
+  @PrimaryGeneratedColumn()
+  public id: number;
 }

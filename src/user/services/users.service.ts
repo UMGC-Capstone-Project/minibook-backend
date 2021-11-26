@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserCreateDto } from '../../common/dto/UserCreateDto';
 import { UserDto } from '../../common/dto/UserDto';
 import { toUserDto } from '../../common/mapper';
 import { isPasswordMatching } from '../../common/utils';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { FileService } from './fileupload.service';
+import { UserCreateRequestDto } from 'src/common/dto/UserCreateRequestDto';
 
 export type User = any;
 
@@ -18,9 +18,9 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly fileUploadService: FileService,
-  ) { }
+  ) {}
 
-  async create(userCreateDto: UserCreateDto): Promise<UserEntity> {
+  async create(userCreateDto: UserCreateRequestDto): Promise<UserEntity> {
     const user = new UserEntity();
     user.displayname = userCreateDto.displayname;
     user.email = userCreateDto.email;
@@ -44,10 +44,10 @@ export class UsersService {
 
   async addAvatar(userId: number, file) {
     const avatar = await this.fileUploadService.addAvatar(userId, file);
-    const user = await this.findById(userId)
+    const user = await this.findById(userId);
     await this.userRepository.update(userId, {
       ...user,
-      avatar
+      avatar,
     });
     return avatar;
   }
@@ -58,7 +58,7 @@ export class UsersService {
     if (fileId) {
       await this.userRepository.update(userId, {
         ...user,
-        avatar: null
+        avatar: null,
       });
       await this.fileUploadService.delete(fileId);
     }
