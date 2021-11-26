@@ -13,15 +13,17 @@ import {
   UseInterceptors,
   Body,
   UploadedFiles,
+  HttpCode,
 } from '@nestjs/common';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
 import { FileService } from 'src/file/services/file.service';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
 import { UserDto } from '../../common/dto/UserDto';
 import { toUserDto } from '../../common/mapper';
 import { UsersService } from '../services/users.service';
+import { FriendsService } from '../services/friend.service';
 
 export class SampleDto {
   name: string;
@@ -36,19 +38,16 @@ export class SampleDto {
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly fileUploadService: FileService,
+    private readonly friendsService: FriendsService,
+    
   ) {}
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async index(@UserRequest() user): Promise<any> {
-    console.log('index: ' + JSON.stringify(user));
-
+  async index(@UserRequest() user): Promise<UserDto> {
     if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
-
-    // const _user = await this.usersService.findById(user.id);
-    // const _newsboard = _user.newsboard.posts;
-    return user;
+    const _user = await this.usersService.findById(user.id);
+    return _user;
   }
 
   @Post('avatar')
@@ -74,6 +73,7 @@ export class UsersController {
   }
 
   @Get('avatar/delete')
+  @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   async deleteAvatar(
     @UserRequest() user,
@@ -82,20 +82,39 @@ export class UsersController {
   }
 
   @Get(':id')
-  async indexById(@Param() params): Promise<UserDto> {
-    console.log('index :id: ' + params);
-    // returns current authenticated users newsboard infromation.
-    const user = await this.usersService.findById(params.id);
-
-    if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
-
-    return toUserDto(user);
+  @ApiParam({
+    name: 'id',
+    type: String
+  })
+  async indexById(@Param('id') id): Promise<UserDto> {
+    const _user = await this.usersService.findById(id);
+    return _user;
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id/profile')
-  async profile(@Request() req): Promise<any> {
+  async profile(@Param('id') params, @Request() req): Promise<any> {
     console.log(req.user);
     return req.user;
+  }
+
+  @Get(':id/follow')
+  follow() {
+    return this.friendsService.follow();
+  }
+
+  @Get(':id/unfollow')
+  unfollow() {
+    return this.friendsService.unfollow();
+  }
+
+  @Get(':id/block')
+  block() {
+    return this.friendsService.block();
+  }
+
+  @Get(':id/unblock')
+  unblock() {
+    return this.friendsService.unblock();
   }
 }

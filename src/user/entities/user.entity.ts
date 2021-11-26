@@ -60,6 +60,9 @@ export class UserEntity {
   @OneToOne(() => PublicFileEntity, { eager: true, nullable: true })
   public avatar?: PublicFileEntity;
 
+  public followers: Array<number>;
+  public following: Array<number>;
+
   // @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   // public created_at: Date;
 

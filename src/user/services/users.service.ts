@@ -18,7 +18,7 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly fileUploadService: FileService,
-  ) {}
+  ) { }
 
   async create(userCreateDto: UserCreateRequestDto): Promise<UserEntity> {
     const user = new UserEntity();
@@ -44,7 +44,7 @@ export class UsersService {
 
   async addAvatar(userId: number, file) {
     const avatar = await this.fileUploadService.addAvatar(userId, file);
-    const user = await this.findById(userId);
+    const user = await this.userRepository.findOne(userId);
     await this.userRepository.update(userId, {
       ...user,
       avatar,
@@ -53,7 +53,7 @@ export class UsersService {
   }
 
   async deleteAvatar(userId: number) {
-    const user = await this.findById(userId);
+    const user = await this.userRepository.findOne(userId);
     const fileId = user.avatar?.id;
     if (fileId) {
       await this.userRepository.update(userId, {
@@ -66,6 +66,7 @@ export class UsersService {
 
   async findOne(options?: object): Promise<UserDto> {
     const user = await this.userRepository.findOne(options);
+    if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
     return toUserDto(user);
   }
 
@@ -73,22 +74,27 @@ export class UsersService {
     return this.findOne({ where: { email: email } });
   }
 
-  async findByEmail(email: string): Promise<UserEntity> {
+  async findByEmail(email: string): Promise<UserDto> {
     return await this.userRepository.findOne({ where: { email: email } });
   }
 
-  async findById(id: number): Promise<UserEntity> {
-    return await this.userRepository.findOne(id);
+  async findById(id: number): Promise<UserDto> {
+    const user = await this.userRepository.findOne(id);
+    return user;
   }
 
-  async findByDisplayName(displayName: string): Promise<UserEntity> {
+  async findByDisplayName(displayName: string): Promise<UserDto> {
     return await this.userRepository.findOne({
       where: { displayname: displayName },
     });
   }
 
   async findByLogin({ email, password }): Promise<UserDto> {
-    const user = await this.findByEmail(email);
+    const user = await this.userRepository.findOne({
+      where: {
+        email: email,
+      }
+    });
     console.log('findbyLogin: ' + email);
     if (!user)
       throw new HttpException('user not found', HttpStatus.UNAUTHORIZED);
@@ -98,4 +104,9 @@ export class UsersService {
 
     return toUserDto(user);
   }
+
+  // async getUser(userId: number) {
+  //   const user  = await this.findById(userId);
+  //   return toUserDto(user);
+  // }
 }
