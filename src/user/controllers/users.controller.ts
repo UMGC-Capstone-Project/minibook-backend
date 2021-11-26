@@ -16,11 +16,11 @@ import {
 } from '@nestjs/common';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { FileService } from 'src/file/services/file.service';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
 import { UserDto } from '../../common/dto/UserDto';
 import { toUserDto } from '../../common/mapper';
-import { FileService } from '../services/fileupload.service';
 import { UsersService } from '../services/users.service';
 
 export class SampleDto {

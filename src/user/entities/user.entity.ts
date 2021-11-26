@@ -9,8 +9,9 @@ import {
 } from 'typeorm';
 import * as argon2 from 'argon2';
 import { NewsPostEntity } from '../../feed/entities/news-post.entity';
-import { PublicFileEntity } from './public-file.entity';
+
 import { ApiProperty } from '@nestjs/swagger';
+import { PublicFileEntity } from 'src/file/entities/public-file.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity {

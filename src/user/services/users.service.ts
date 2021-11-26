@@ -5,8 +5,8 @@ import { toUserDto } from '../../common/mapper';
 import { isPasswordMatching } from '../../common/utils';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
-import { FileService } from './fileupload.service';
-import { UserCreateRequestDto } from 'src/common/dto/UserCreateRequestDto';
+import { UserCreateRequestDto } from '../../common/dto/UserCreateRequestDto';
+import { FileService } from '../../file/services/file.service';
 
 export type User = any;
 
