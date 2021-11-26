@@ -18,7 +18,7 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly fileUploadService: FileService,
-  ) { }
+  ) {}
 
   async create(userCreateDto: UserCreateRequestDto): Promise<UserEntity> {
     const user = new UserEntity();
@@ -93,7 +93,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({
       where: {
         email: email,
-      }
+      },
     });
     console.log('findbyLogin: ' + email);
     if (!user)

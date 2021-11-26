@@ -36,7 +36,6 @@ export class FeedService {
   async update(id: number, postUpdate: any) {
     return await this.newsPostRepository.update(id, postUpdate);
   }
-  
 
   async delete(id: number) {
     return await this.newsPostRepository.delete(id);

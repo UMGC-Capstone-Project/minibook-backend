@@ -16,7 +16,13 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FileService } from 'src/file/services/file.service';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
@@ -39,7 +45,6 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly friendsService: FriendsService,
-    
   ) {}
 
   @Get()
@@ -75,16 +80,14 @@ export class UsersController {
   @Get('avatar/delete')
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
-  async deleteAvatar(
-    @UserRequest() user,
-  ) {
+  async deleteAvatar(@UserRequest() user) {
     return await this.usersService.deleteAvatar(user.id);
   }
 
   @Get(':id')
   @ApiParam({
     name: 'id',
-    type: String
+    type: String,
   })
   async indexById(@Param('id') id): Promise<UserResponseDto> {
     const _user = await this.usersService.findById(id);

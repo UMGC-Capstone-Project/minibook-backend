@@ -10,6 +10,6 @@ export class UserResponseDto {
   @IsNotEmpty()
   @IsEmail()
   email: string;
-  
+
   avatarUrl?: string;
 }

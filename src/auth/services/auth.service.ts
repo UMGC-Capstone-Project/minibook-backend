@@ -69,7 +69,9 @@ export class AuthService {
     return await this.jwtService.signAsync(payload);
   }
 
-  private createAuthenticationPayload(data: UserResponseDto): AuthenticationPayload {
+  private createAuthenticationPayload(
+    data: UserResponseDto,
+  ): AuthenticationPayload {
     return {
       displayName: data.displayname,
       email: data.email,
