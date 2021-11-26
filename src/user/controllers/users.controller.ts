@@ -73,6 +73,14 @@ export class UsersController {
     return await this.usersService.addAvatar(user.id, file);
   }
 
+  @Get('avatar/delete')
+  @UseGuards(JwtAuthGuard)
+  async deleteAvatar(
+    @UserRequest() user,
+  ) {
+    return await this.usersService.deleteAvatar(user.id);
+  }
+
   @Get(':id')
   async indexById(@Param() params): Promise<UserDto> {
     console.log('index :id: ' + params);
