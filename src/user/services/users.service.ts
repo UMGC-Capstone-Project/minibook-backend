@@ -18,7 +18,7 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly fileUploadService: FileService,
-  ) {}
+  ) { }
 
   async create(userCreateDto: UserCreateDto): Promise<UserEntity> {
     const user = new UserEntity();
@@ -50,6 +50,18 @@ export class UsersService {
       avatar
     });
     return avatar;
+  }
+
+  async deleteAvatar(userId: number) {
+    const user = await this.findById(userId);
+    const fileId = user.avatar?.id;
+    if (fileId) {
+      await this.userRepository.update(userId, {
+        ...user,
+        avatar: null
+      });
+      await this.fileUploadService.delete(fileId);
+    }
   }
 
   async findOne(options?: object): Promise<UserDto> {

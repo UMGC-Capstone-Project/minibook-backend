@@ -139,11 +139,18 @@ export class FileService extends S3Bucket {
     async manageAccess(location: string, acl: SUPPORTED_ACL_TYPE) {
 
     }
-    
-    async delete(){
-        const paramas = this.createS3DeleteParams('2/Photos/8cedbf62-a603-493f-8cbc-c387a82d928f.jpg')
-        const results = await this.s3.deleteObject(paramas).promise();
-        return {};
+
+    async delete(fileId: number) {
+        const response = {
+            success: false
+        }
+        const file = await this.publicFileRepository.findOne(fileId);
+        if (file) {
+            const paramas = this.createS3DeleteParams(file.key);
+            await this.s3.deleteObject(paramas).promise();
+            response.success = true;
+        }
+        return response;
     }
 }
 
