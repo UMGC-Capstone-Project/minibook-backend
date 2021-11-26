@@ -1,15 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthenticationPayload } from '../../common/dto/AuthenticationPayload';
-import { AccessTokenPayload } from '../../common/dto/AccessTokenPayload';
+import { AuthenticationPayload } from '../dto/AuthenticationPayload';
+import { AccessTokenPayload } from '../dto/AccessTokenPayload';
 
-import { UserDto } from '../../common/dto/UserDto';
+import { UserResponseDto } from '../../user/dto/UserResponseDto';
 import { isPasswordMatching } from '../../common/utils';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity';
 import { User } from '../../user/services/users.service';
-import { UserCreateRequestDto } from 'src/common/dto/UserCreateRequestDto';
+import { UserCreateRequestDto } from 'src/user/dto/UserCreateRequestDto';
 import { UserLoginResponseDto } from '../dto/UserLoginResponseDto';
 import { UserRecoveryResponseDto } from '../dto/UserRecoveryResponseDto';
 import { UserRecoveryRequestDto } from '../dto/UserRecoveryRequestDto';
@@ -69,7 +69,7 @@ export class AuthService {
     return await this.jwtService.signAsync(payload);
   }
 
-  private createAuthenticationPayload(data: UserDto): AuthenticationPayload {
+  private createAuthenticationPayload(data: UserResponseDto): AuthenticationPayload {
     return {
       displayName: data.displayname,
       email: data.email,

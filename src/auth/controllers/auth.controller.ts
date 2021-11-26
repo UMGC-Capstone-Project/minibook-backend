@@ -9,7 +9,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
-import { UserRequest } from 'src/common/decorator';
+import { UserRequest } from '../../common/decorator';
 import { LocalAuthGuard } from '../guard/local-auth.guard';
 import {
   ApiBadRequestResponse,
@@ -22,9 +22,8 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserCreateRequestDto } from 'src/common/dto/UserCreateRequestDto';
-import { UserCreateResponseDto } from 'src/common/dto/UserCreateResponseDto';
-import { UserEntity } from 'src/user/entities/user.entity';
+import { UserCreateRequestDto } from '../../user/dto/UserCreateRequestDto';
+import { UserEntity } from '../../user/entities/user.entity';
 import { BadRequestResponseDto } from '../dto/BadRequestDto';
 import { UserLoginRequestDto } from '../dto/UserLoginRequestDto';
 import { UserLoginResponseDto } from '../dto/UserLoginResponseDto';

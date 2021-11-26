@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserDto } from '../../common/dto/UserDto';
+import { UserResponseDto } from '../dto/UserResponseDto';
 import { toUserDto } from '../../common/mapper';
 import { isPasswordMatching } from '../../common/utils';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
-import { UserCreateRequestDto } from '../../common/dto/UserCreateRequestDto';
+import { UserCreateRequestDto } from '../dto/UserCreateRequestDto';
 import { FileService } from '../../file/services/file.service';
 
 export type User = any;
@@ -64,32 +64,32 @@ export class UsersService {
     }
   }
 
-  async findOne(options?: object): Promise<UserDto> {
+  async findOne(options?: object): Promise<UserResponseDto> {
     const user = await this.userRepository.findOne(options);
     if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
     return toUserDto(user);
   }
 
-  async findByPayload(email: string): Promise<UserDto> {
+  async findByPayload(email: string): Promise<UserResponseDto> {
     return this.findOne({ where: { email: email } });
   }
 
-  async findByEmail(email: string): Promise<UserDto> {
+  async findByEmail(email: string): Promise<UserResponseDto> {
     return await this.userRepository.findOne({ where: { email: email } });
   }
 
-  async findById(id: number): Promise<UserDto> {
+  async findById(id: number): Promise<UserResponseDto> {
     const user = await this.userRepository.findOne(id);
     return user;
   }
 
-  async findByDisplayName(displayName: string): Promise<UserDto> {
+  async findByDisplayName(displayName: string): Promise<UserResponseDto> {
     return await this.userRepository.findOne({
       where: { displayname: displayName },
     });
   }
 
-  async findByLogin({ email, password }): Promise<UserDto> {
+  async findByLogin({ email, password }): Promise<UserResponseDto> {
     const user = await this.userRepository.findOne({
       where: {
         email: email,

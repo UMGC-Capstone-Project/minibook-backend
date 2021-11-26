@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserDto } from '../../common/dto/UserDto';
+import { UserResponseDto } from '../../user/dto/UserResponseDto';
 import { UsersService } from '../../user/services/users.service';
 import { Repository } from 'typeorm';
 import { NewsPostEntity } from '../entities/news-post.entity';
@@ -15,7 +15,7 @@ export class FeedService {
 
   async create(
     newsPost: NewsPostEntity,
-    user: UserDto,
+    user: UserResponseDto,
   ): Promise<NewsPostEntity> {
     const post = await this.newsPostRepository.create({
       author: { id: user.id },
@@ -36,6 +36,7 @@ export class FeedService {
   async update(id: number, postUpdate: any) {
     return await this.newsPostRepository.update(id, postUpdate);
   }
+  
 
   async delete(id: number) {
     return await this.newsPostRepository.delete(id);

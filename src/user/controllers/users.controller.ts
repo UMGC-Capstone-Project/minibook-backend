@@ -20,7 +20,7 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiParam, ApiTags } from '@nestjs/
 import { FileService } from 'src/file/services/file.service';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
-import { UserDto } from '../../common/dto/UserDto';
+import { UserResponseDto } from '../dto/UserResponseDto';
 import { toUserDto } from '../../common/mapper';
 import { UsersService } from '../services/users.service';
 import { FriendsService } from '../services/friend.service';
@@ -44,7 +44,7 @@ export class UsersController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async index(@UserRequest() user): Promise<UserDto> {
+  async index(@UserRequest() user): Promise<UserResponseDto> {
     if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
     const _user = await this.usersService.findById(user.id);
     return _user;
@@ -86,7 +86,7 @@ export class UsersController {
     name: 'id',
     type: String
   })
-  async indexById(@Param('id') id): Promise<UserDto> {
+  async indexById(@Param('id') id): Promise<UserResponseDto> {
     const _user = await this.usersService.findById(id);
     return _user;
   }

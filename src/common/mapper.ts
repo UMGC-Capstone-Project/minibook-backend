@@ -1,9 +1,9 @@
 import { UserEntity } from '../user/entities/user.entity';
-import { UserDto } from './dto/UserDto';
+import { UserResponseDto } from '../user/dto/UserResponseDto';
 
-export const toUserDto = (data: UserEntity): UserDto => {
+export const toUserDto = (data: UserEntity): UserResponseDto => {
   const { id, displayname, email, ...results } = data;
-  const userDto: UserDto = { id, displayname, email, avatarUrl: buildImageUrl(results.avatar.key) };
+  const userDto: UserResponseDto = { id, displayname, email, avatarUrl: buildImageUrl(results.avatar.key) };
   return userDto;
 };
 
