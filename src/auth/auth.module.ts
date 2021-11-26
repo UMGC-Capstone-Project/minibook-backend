@@ -8,6 +8,7 @@ import { AuthController } from './controllers/auth.controller';
 import { jwtConstants } from '../common/constants/jwt.consts';
 import { UsersModule } from '../user/users.module';
 
+// TODO: add in config service for jwt sec...
 @Module({
   imports: [
     UsersModule,

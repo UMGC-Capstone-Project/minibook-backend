@@ -12,7 +12,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HealthModule } from './health/health.module';
 import { ChatModule } from './chat/chat.module';
 import configuration from './config/configuration';
-import { PublicFileEntity } from './user/entities/public-file.entity';
+
+import { FileModule } from './file/file.module';
+import { PublicFileEntity } from './file/entities/public-file.entity';
 
 @Module({
   imports: [
@@ -43,6 +45,7 @@ import { PublicFileEntity } from './user/entities/public-file.entity';
     FeedModule,
     HealthModule,
     ChatModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
