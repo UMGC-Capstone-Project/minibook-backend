@@ -12,6 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HealthModule } from './health/health.module';
 import { ChatModule } from './chat/chat.module';
 import configuration from './config/configuration';
+import { PublicFileEntity } from './user/entities/public-file.entity';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import configuration from './config/configuration';
           ca: configService.get<string>('database.certificateAuthority'),
           rejectUnauthorized: false,
         },
-        entities: [UserEntity, NewsPostEntity, PostEntity],
+        entities: [UserEntity, NewsPostEntity, PostEntity, PublicFileEntity],
       }),
       inject: [ConfigService],
     }),

@@ -20,7 +20,7 @@ import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
 import { UserDto } from '../../common/dto/UserDto';
 import { toUserDto } from '../../common/mapper';
-import { FileUploadService } from '../services/fileupload.service';
+import { FileService } from '../services/fileupload.service';
 import { UsersService } from '../services/users.service';
 
 export class SampleDto {
@@ -35,7 +35,7 @@ export class SampleDto {
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly fileUploadService: FileUploadService,
+    private readonly fileUploadService: FileService,
   ) { }
 
   @UseGuards(JwtAuthGuard)
@@ -64,6 +64,14 @@ export class UsersController {
   @ApiConsumes('multipart/form-data')
   async uploadFiles(@UserRequest() user, @UploadedFiles() files: Array<Express.Multer.File>) {
     return await this.fileUploadService.uploadMultiPublic(user.id, files);
+  }
+
+  @Post('avatar')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  async addAvatar(@UserRequest() user, @UploadedFile() file: Express.Multer.File) {
+    return await this.usersService.addAvatar(user.id, file);
   }
 
   @Get(':id')

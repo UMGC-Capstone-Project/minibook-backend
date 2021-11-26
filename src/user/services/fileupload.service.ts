@@ -6,6 +6,9 @@ import { v4 as uuid } from 'uuid';
 import * as AWS from 'aws-sdk';
 import { S3 } from 'aws-sdk';
 import { ManagedUpload } from 'aws-sdk/clients/s3';
+import { Repository } from 'typeorm';
+import { PublicFileEntity } from '../entities/public-file.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 const MIME_TYPE_MAP = {
     'image/png': 'png',
@@ -27,10 +30,13 @@ export enum SUPPORTED_ACL_TYPE {
 //      Configuration Services
 
 @Injectable()
-export class FileUploadService extends S3Bucket {
+export class FileService extends S3Bucket {
     bucketEndpoint: string;
 
-    constructor() {
+    constructor(
+        @InjectRepository(PublicFileEntity)
+        private readonly publicFileRepository: Repository<PublicFileEntity>,
+    ) {
         super();
         this.bucketEndpoint = 'minibook-images';
         // TODO: move out to nestjs config service
@@ -52,20 +58,20 @@ export class FileUploadService extends S3Bucket {
         throw new Error('Method not implemented.');
     }
 
-    async addUserAvatar(userId: number, imageBuffer: Buffer, filename: string) {
-        // this.upload()
+    async addAvatar(userId: number, file) {
+        const results = await this.uploadPublic(userId, file)
+        const newFile = this.publicFileRepository.create({
+            key: results.Key,
+            url: results.Location
+        })
+        await this.publicFileRepository.save(newFile);
+        return newFile;
     }
 
     // TODO: We might combine this into just one function upload(s).
     async upload(userId: number, file: Express.Multer.File, acl: SUPPORTED_ACL_TYPE) {
         let params: S3.Types.PutObjectRequest = this.createS3UploadParams(userId, file, acl);
-
-        const results = await this.s3.upload(params).promise();
-
-        return {
-            key: results.Key,
-            url: results.Location,
-        };
+        return await this.s3.upload(params).promise();
     }
 
     createUserFilePath(userId: number) {

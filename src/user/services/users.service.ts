@@ -6,6 +6,7 @@ import { toUserDto } from '../../common/mapper';
 import { isPasswordMatching } from '../../common/utils';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
+import { FileService } from './fileupload.service';
 
 export type User = any;
 
@@ -16,6 +17,7 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly fileUploadService: FileService,
   ) {}
 
   async create(userCreateDto: UserCreateDto): Promise<UserEntity> {
@@ -38,6 +40,16 @@ export class UsersService {
 
     // await this.userRepository.save(user);
     // return toUserDto(user);
+  }
+
+  async addAvatar(userId: number, file) {
+    const avatar = await this.fileUploadService.addAvatar(userId, file);
+    const user = await this.findById(userId)
+    await this.userRepository.update(userId, {
+      ...user,
+      avatar
+    });
+    return avatar;
   }
 
   async findOne(options?: object): Promise<UserDto> {

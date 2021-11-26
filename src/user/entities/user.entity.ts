@@ -2,11 +2,15 @@ import {
   BeforeInsert,
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import * as argon2 from 'argon2';
 import { NewsPostEntity } from '../../feed/entities/news-post.entity';
+import { PublicFileEntity } from './public-file.entity';
+
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -47,6 +51,10 @@ export class UserEntity {
     (newsPostEntity) => newsPostEntity.author,
   )
   newsposts: NewsPostEntity[];
+
+  @JoinColumn()
+  @OneToOne(() => PublicFileEntity, {eager: true, nullable: true})
+  public avatar?: PublicFileEntity
 
   // @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   // public created_at: Date;
