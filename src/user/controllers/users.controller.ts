@@ -29,7 +29,7 @@ import { FileService } from 'src/file/services/file.service';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
 import { UserResponseDto } from '../dto/UserResponseDto';
-import { toUserDto } from '../../common/mapper';
+import { toAvatarDto, toUserDto } from '../../common/mapper';
 import { UsersService } from '../services/users.service';
 import { FriendsService } from '../services/friend.service';
 
@@ -76,7 +76,8 @@ export class UsersController {
     @UserRequest() user,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return await this.usersService.addAvatar(user.id, file);
+    const avatar = await this.usersService.addAvatar(user.id, file);
+    return toAvatarDto(avatar);
   }
 
   @Get('avatar/delete')
@@ -99,7 +100,6 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get(':id/profile')
   async profile(@Param('id') params, @Request() req): Promise<any> {
-    console.log(req.user);
     return req.user;
   }
 
