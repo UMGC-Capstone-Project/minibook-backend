@@ -14,6 +14,8 @@ import {
   Body,
   UploadedFiles,
   HttpCode,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -49,10 +51,10 @@ export class UsersController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
+  @UsePipes(new ValidationPipe({ transform: true }))
   async index(@UserRequest() user): Promise<UserResponseDto> {
     if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
-    const _user = await this.usersService.findById(user.id);
-    return _user;
+    return await this.usersService.findById(user.id);
   }
 
   @Post('avatar')

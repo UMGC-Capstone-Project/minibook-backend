@@ -80,7 +80,7 @@ export class UsersService {
 
   async findById(id: number): Promise<UserResponseDto> {
     const user = await this.userRepository.findOne(id);
-    return user;
+    return toUserDto(user);
   }
 
   async findByDisplayName(displayName: string): Promise<UserResponseDto> {
