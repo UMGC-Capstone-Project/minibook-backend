@@ -12,4 +12,8 @@ export default () => ({
     logging: false,
     certificateAuthority: process.env.DATABASE_CA_CERT,
   },
+  smtp: {
+    transport: process.env.SMTP_TRANSPORT,
+    from: process.env.SMTP_FROM,
+  },
 });

@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticationPayload } from '../dto/AuthenticationPayload';
 import { AccessTokenPayload } from '../dto/AccessTokenPayload';
-
+import { SentMessageInfo } from 'nodemailer';
 import { UserResponseDto } from '../../user/dto/UserResponseDto';
 import { isPasswordMatching } from '../../common/utils';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +13,8 @@ import { UserCreateRequestDto } from 'src/user/dto/UserCreateRequestDto';
 import { UserLoginResponseDto } from '../dto/UserLoginResponseDto';
 import { UserRecoveryResponseDto } from '../dto/UserRecoveryResponseDto';
 import { UserRecoveryRequestDto } from '../dto/UserRecoveryRequestDto';
+import { MailerService } from '@nestjs-modules/mailer';
+import { UserCreateResponseDto } from 'src/user/dto/UserCreateResponseDto';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +22,7 @@ export class AuthService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly jwtService: JwtService,
+    private readonly mailerService: MailerService,
   ) {}
 
   public async register(data: UserCreateRequestDto): Promise<any> {
@@ -29,7 +32,27 @@ export class AuthService {
     const user = await this.userRepository.create(data);
     await this.userRepository.save(user);
     const { password, ...result } = user;
+    this.sendEmail(user);
     return result;
+  }
+
+  sendEmail(user: UserEntity) {
+    console.log(process.cwd() + '/template/' + 'index.hbs');
+    console.log(__dirname + '/index');
+    this.mailerService
+      .sendMail({
+        to: user.email,
+        from: 'noreply@minibook.io',
+        subject: 'Welcome to MiniBook.io!',
+        template: process.cwd() + '/template/' + 'index',
+        context: {
+          // Data to be sent to template engine.
+          code: 'cf1a3f828287',
+          username: user.displayname,
+        },
+      })
+      .then((success) => console.log(success))
+      .catch((err) => console.log(err));
   }
 
   // Local Strategy -> Validate User -> Login -> AccessTokenPayload

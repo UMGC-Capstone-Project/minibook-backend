@@ -29,6 +29,7 @@ import { UserLoginRequestDto } from '../dto/UserLoginRequestDto';
 import { UserLoginResponseDto } from '../dto/UserLoginResponseDto';
 import { UserRecoveryRequestDto } from '../dto/UserRecoveryRequestDto';
 import { UserRecoveryResponseDto } from '../dto/UserRecoveryResponseDto';
+import { UserCreateResponseDto } from 'src/user/dto/UserCreateResponseDto';
 
 @Controller({
   path: 'auth',
@@ -51,7 +52,7 @@ export class AuthController {
   })
   async register(
     @Body() createUserDto: UserCreateRequestDto,
-  ): Promise<UserEntity> {
+  ): Promise<UserCreateResponseDto> {
     return this.authService.register(createUserDto);
   }
 

@@ -12,9 +12,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HealthModule } from './health/health.module';
 import { ChatModule } from './chat/chat.module';
 import configuration from './config/configuration';
-
+import { MailerModule } from '@nestjs-modules/mailer';
 import { FileModule } from './file/file.module';
 import { PublicFileEntity } from './file/entities/public-file.entity';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 @Module({
   imports: [
@@ -40,6 +41,23 @@ import { PublicFileEntity } from './file/entities/public-file.entity';
       }),
       inject: [ConfigService],
     }),
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        transport: configService.get<string>('smtp.transport'),
+        defaults: {
+          from: '"minibook" <no-reply@minibook.io>',
+        },
+        template: {
+          dir: process.cwd() + '/template/',
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      }),
+      inject: [ConfigService],
+    }),
     AuthModule,
     UsersModule,
     FeedModule,
@@ -51,3 +69,4 @@ import { PublicFileEntity } from './file/entities/public-file.entity';
   providers: [AppService],
 })
 export class AppModule {}
+console.log(process.cwd() + '/template/');

@@ -7,4 +7,4 @@ export const isPasswordMatching = async (
 
 export const buildImageUrl = (key: string): string => {
   return `https://imgs.minibook.io/${key}`;
-}
+};
