@@ -24,7 +24,7 @@ export class AuthService {
     private readonly userRepository: Repository<UserEntity>,
     private readonly jwtService: JwtService,
     private readonly mailerService: MailerService,
-  ) { }
+  ) {}
 
   public async register(data: UserCreateRequestDto): Promise<any> {
     if (await this.isUserExists(data.email))
@@ -33,14 +33,10 @@ export class AuthService {
     const user = await this.userRepository.create(data);
     await this.userRepository.save(user);
     const { password, ...result } = user;
-    this.sendEmail(
-      user.email,
-      'index',
-      'Welcome to MiniBook.io!',
-      {
-        username: user.displayname,
-        code: 'cf1a3f828287',
-      });
+    this.sendEmail(user.email, 'index', 'Welcome to MiniBook.io!', {
+      username: user.displayname,
+      code: 'cf1a3f828287',
+    });
     return result;
   }
 
@@ -62,18 +58,14 @@ export class AuthService {
     const { email } = data;
     const response: UserRecoveryResponseDto = {
       successful: true,
-    }
+    };
     const user = await this.userRepository.findOne({ where: { email: email } });
     if (!user) return response;
-    this.sendEmail(
-      user.email,
-      'recover',
-      'Recover MiniBook.io Account!',
-      {
-        displayName: user.displayname,
-        email: user.email,
-        code: 'cf1a3f828287',
-      });
+    this.sendEmail(user.email, 'recover', 'Recover MiniBook.io Account!', {
+      displayName: user.displayname,
+      email: user.email,
+      code: 'cf1a3f828287',
+    });
     return response;
   }
 
@@ -106,7 +98,12 @@ export class AuthService {
     };
   }
 
-  sendEmail(_email: string, _template: string, _subject: string, _context: { [name: string]: any; }) {
+  sendEmail(
+    _email: string,
+    _template: string,
+    _subject: string,
+    _context: { [name: string]: any },
+  ) {
     this.mailerService
       .sendMail({
         to: _email,

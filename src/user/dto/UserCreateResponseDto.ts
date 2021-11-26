@@ -1,11 +1,5 @@
 import { ApiProperty, ApiResponse } from '@nestjs/swagger';
-import {
-  ValidateIf,
-  IsNotEmpty,
-  IsEmail,
-  minLength,
-  Min,
-} from 'class-validator';
+import { IsNotEmpty, IsEmail, Min } from 'class-validator';
 
 export class UserCreateResponseDto {
   @IsNotEmpty()
@@ -25,7 +19,7 @@ export class UserCreateResponseDto {
     description: 'The email for the user',
     type: String,
     minimum: 4,
-    default: 'johndoe@miniboo.io',
+    default: 'johndoe@minibook.io',
   })
   email: string;
 

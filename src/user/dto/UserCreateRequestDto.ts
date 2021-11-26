@@ -19,13 +19,33 @@ export class UserCreateRequestDto {
   displayname: string;
 
   @IsNotEmpty()
+  @Min(1)
+  @ApiProperty({
+    description: 'The first name for the user',
+    type: String,
+    minimum: 1,
+    default: 'John',
+  })
+  firstname: string;
+
+  @IsNotEmpty()
+  @Min(1)
+  @ApiProperty({
+    description: 'The last name for the user',
+    type: String,
+    minimum: 1,
+    default: 'Doe',
+  })
+  lastname: string;
+
+  @IsNotEmpty()
   @IsEmail()
   @Min(4)
   @ApiProperty({
     description: 'The email for the user',
     type: String,
     minimum: 4,
-    default: 'johndoe@miniboo.io',
+    default: 'johndoe@minibook.io',
   })
   email: string;
 

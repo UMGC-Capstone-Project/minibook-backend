@@ -60,6 +60,18 @@ export class UserEntity {
   @OneToOne(() => PublicFileEntity, { eager: true, nullable: true })
   public avatar?: PublicFileEntity;
 
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
+  firstname: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
+  lastname: string;
+
   public followers: Array<number>;
   public following: Array<number>;
 
