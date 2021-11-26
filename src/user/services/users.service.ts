@@ -95,7 +95,6 @@ export class UsersService {
         email: email,
       },
     });
-    console.log('findbyLogin: ' + email);
     if (!user)
       throw new HttpException('user not found', HttpStatus.UNAUTHORIZED);
 

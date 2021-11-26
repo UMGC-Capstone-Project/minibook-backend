@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsUrl } from 'class-validator';
 
 export class UserResponseDto {
   @IsNotEmpty()
@@ -11,5 +11,6 @@ export class UserResponseDto {
   @IsEmail()
   email: string;
 
+  @IsUrl()
   avatarUrl?: string;
 }
