@@ -16,4 +16,7 @@ export default () => ({
     transport: process.env.SMTP_TRANSPORT,
     from: process.env.SMTP_FROM,
   },
+  jwt: {
+    secret: process.env.JWT_SECRET
+  }
 });
