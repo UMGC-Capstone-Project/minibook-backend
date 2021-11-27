@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { PublicFileEntity } from '../entities/public-file.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { S3Bucket } from '../classes/S3Bucket';
+import { ConfigService } from '@nestjs/config';
 
 const MIME_TYPE_MAP = {
   'image/png': 'png',
@@ -31,16 +32,16 @@ export class FileService extends S3Bucket {
   constructor(
     @InjectRepository(PublicFileEntity)
     private readonly publicFileRepository: Repository<PublicFileEntity>,
+    private readonly configService: ConfigService,
   ) {
     super();
-    this.bucketEndpoint = 'minibook-images';
-    // TODO: move out to nestjs config service
-    console.log(process.env.S3_ENDPOINT);
-    this.endpoint = new AWS.Endpoint(process.env.S3_ENDPOINT);
-
+    this.bucketEndpoint = this.configService.get<string>('s3.bucketEndpoint');
+    this.endpoint = new AWS.Endpoint(
+      this.configService.get<string>('s3.endpoint'),
+    );
     this.credentials = new AWS.Credentials({
-      accessKeyId: process.env.S3_ACCESSKEY,
-      secretAccessKey: process.env.S3_SECRET_ACCESSKEY,
+      accessKeyId: this.configService.get<string>('s3.accessKey'),
+      secretAccessKey: this.configService.get<string>('s3.secretKey'),
     });
 
     this.s3 = new AWS.S3({

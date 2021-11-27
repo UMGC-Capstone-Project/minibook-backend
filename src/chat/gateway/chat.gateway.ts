@@ -1,13 +1,9 @@
 import { Logger } from '@nestjs/common';
 import {
-  MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
-import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Socket, Server } from 'socket.io';
 
 @WebSocketGateway({

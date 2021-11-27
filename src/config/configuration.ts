@@ -2,6 +2,17 @@ export default () => ({
   port: parseInt(process.env.PORT, 10) || 3000,
   address: process.env.ADDRESS || '0.0.0.0',
 
+  queue: {
+    host: process.env.QUEUE_HOST,
+    port: process.env.QUEUE_PORT,
+  },
+  s3: {
+    bucketEndpoint: process.env.S3_BUCKETENDPOINT,
+    baseUrl: process.env.S3_CUSTOMDOMAIN,
+    endpoint: process.env.S3_ENDPOINT,
+    accessKey: process.env.S3_ACCESSKEY,
+    secretKey: process.env.S3_SECRETKEY,
+  },
   database: {
     host: process.env.DATABASE_HOST,
     port: process.env.DATABASE_PORT,
@@ -17,6 +28,6 @@ export default () => ({
     from: process.env.SMTP_FROM,
   },
   jwt: {
-    secret: process.env.JWT_SECRET
-  }
+    secret: process.env.JWT_SECRET,
+  },
 });

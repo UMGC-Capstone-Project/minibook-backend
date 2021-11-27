@@ -1,6 +1,5 @@
 import {
   Controller,
-  Injectable,
   Post,
   UploadedFile,
   UploadedFiles,

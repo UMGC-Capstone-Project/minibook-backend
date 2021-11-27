@@ -1,8 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticationPayload } from '../dto/AuthenticationPayload';
-import { AccessTokenPayload } from '../dto/AccessTokenPayload';
-import { SentMessageInfo } from 'nodemailer';
 import { UserResponseDto } from '../../user/dto/UserResponseDto';
 import { isPasswordMatching } from '../../common/utils';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,8 +12,6 @@ import { UserLoginResponseDto } from '../dto/UserLoginResponseDto';
 import { UserRecoveryResponseDto } from '../dto/UserRecoveryResponseDto';
 import { UserRecoveryRequestDto } from '../dto/UserRecoveryRequestDto';
 import { MailerService } from '@nestjs-modules/mailer';
-import { UserCreateResponseDto } from 'src/user/dto/UserCreateResponseDto';
-import { triggerAsyncId } from 'async_hooks';
 
 @Injectable()
 export class AuthService {

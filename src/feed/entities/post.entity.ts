@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'post' })
 export class PostEntity {

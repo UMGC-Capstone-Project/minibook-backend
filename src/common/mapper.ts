@@ -6,7 +6,9 @@ import { AvatarResponseDto } from '../user/dto/AvatarResponseDto';
 
 export const toUserDto = (data: UserEntity): UserResponseDto => {
   const { id, displayname, email, ...results } = data;
-  const imageKey = results.avatar?.key ? results.avatar.key : 'common/default-avatar.jpg'
+  const imageKey = results.avatar?.key
+    ? results.avatar.key
+    : 'common/default-avatar.jpg';
   const userDto: UserResponseDto = {
     id,
     displayname,
@@ -17,9 +19,9 @@ export const toUserDto = (data: UserEntity): UserResponseDto => {
 };
 
 export const toAvatarDto = (data: AvatarRequestDto): AvatarResponseDto => {
-  const {id, key, url} = data;
+  const { id, key, url } = data;
   return {
     success: true,
-    url: buildImageUrl(key)
-  }
-}
+    url: buildImageUrl(key),
+  };
+};

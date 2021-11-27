@@ -16,11 +16,22 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { FileModule } from './file/file.module';
 import { PublicFileEntity } from './file/entities/public-file.entity';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [configuration],
+    }),
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get('queue.host'),
+          port: +configService.get('queue.port'),
+        },
+      }),
+      inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

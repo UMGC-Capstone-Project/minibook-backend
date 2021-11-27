@@ -1,11 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  ValidateIf,
-  IsNotEmpty,
-  IsEmail,
-  minLength,
-  Min,
-} from 'class-validator';
+import { IsNotEmpty, IsEmail, Min } from 'class-validator';
 
 export class UserCreateRequestDto {
   @IsNotEmpty()

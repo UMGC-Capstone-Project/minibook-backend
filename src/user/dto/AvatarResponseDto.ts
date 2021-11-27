@@ -1,4 +1,4 @@
 export class AvatarResponseDto {
-    success: boolean;
-    url: string;
-  }
+  success: boolean;
+  url: string;
+}

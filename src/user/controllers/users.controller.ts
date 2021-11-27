@@ -6,18 +6,14 @@ import {
   Param,
   HttpException,
   HttpStatus,
-  createParamDecorator,
-  ExecutionContext,
   UploadedFile,
   Post,
   UseInterceptors,
-  Body,
-  UploadedFiles,
   HttpCode,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -25,13 +21,14 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { FileService } from 'src/file/services/file.service';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
 import { UserResponseDto } from '../dto/UserResponseDto';
-import { toAvatarDto, toUserDto } from '../../common/mapper';
+import { toAvatarDto } from '../../common/mapper';
 import { UsersService } from '../services/users.service';
 import { FriendsService } from '../services/friend.service';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 export class SampleDto {
   name: string;
@@ -47,6 +44,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly friendsService: FriendsService,
+    @InjectQueue('email') private readonly emailQueue: Queue,
   ) {}
 
   @Get()
@@ -54,7 +52,8 @@ export class UsersController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async index(@UserRequest() user): Promise<UserResponseDto> {
     if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
-    return await this.usersService.findById(user.id);
+    const _user = await this.usersService.findById(user.id);
+    return _user;
   }
 
   @Post('avatar')
