@@ -17,6 +17,7 @@ import { FileModule } from './file/file.module';
 import { PublicFileEntity } from './file/entities/public-file.entity';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { BullModule } from '@nestjs/bull';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -44,7 +45,7 @@ import { BullModule } from '@nestjs/bull';
         password: configService.get<string>('database.password'),
         synchronize: configService.get<boolean>('database.synchronize'),
         keepConnectionAlive: true,
-        ssl: {
+        ssl: { 
           ca: configService.get<string>('database.certificateAuthority'),
           rejectUnauthorized: false,
         },
@@ -75,9 +76,10 @@ import { BullModule } from '@nestjs/bull';
     HealthModule,
     ChatModule,
     FileModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
-console.log(process.cwd() + '/template/');
+export class AppModule { }
+

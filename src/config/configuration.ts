@@ -1,7 +1,11 @@
 export default () => ({
   port: parseInt(process.env.PORT, 10) || 3000,
-  address: process.env.ADDRESS || '0.0.0.0',
-
+  address: '0.0.0.0',
+  elasticsearch: {
+    node: process.env.ELASTICSEARCH_NODE,
+    username: process.env.ELASTICSEARCH_USERNAME,
+    password: process.env.ELASTICSEARCH_PASSWORD
+  },
   queue: {
     host: process.env.QUEUE_HOST,
     port: process.env.QUEUE_PORT,
