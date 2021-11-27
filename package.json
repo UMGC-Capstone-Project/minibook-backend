@@ -7,7 +7,7 @@
   "engineStrict": true,
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Minibook Team",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -48,7 +48,6 @@
     "fs": "^0.0.1-security",
     "handlebars": "^4.7.7",
     "moment": "^2.29.1",
-    "mysql2": "^2.3.3",
     "nodemailer": "^6.7.2",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
