@@ -7,17 +7,17 @@ import { ElasticsearchModule } from '@nestjs/elasticsearch';
     imports: [
         ConfigModule,
         ElasticsearchModule.registerAsync({
-          imports: [ConfigModule],
-          useFactory: async (configService: ConfigService) => ({
-            node: configService.get<string>('ELASTICSEARCH_NODE'),
-            auth: {
-              username: configService.get<string>('ELASTICSEARCH_USERNAME'),
-              password: configService.get<string>('ELASTICSEARCH_PASSWORD'),
-            }
-          }),
-          inject: [ConfigService],
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService) => ({
+                node: configService.get<string>('ELASTICSEARCH_NODE'),
+                auth: {
+                    username: configService.get<string>('ELASTICSEARCH_USERNAME'),
+                    password: configService.get<string>('ELASTICSEARCH_PASSWORD'),
+                }
+            }),
+            inject: [ConfigService],
         }),
-      ],
-      exports: [ElasticsearchModule]
+    ],
+    exports: [ElasticsearchModule]
 })
-export class SearchModule {}
+export class SearchModule { }

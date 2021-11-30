@@ -64,4 +64,8 @@ export class AuthController {
   ): Promise<UserRecoveryResponseDto> {
     return this.authService.recover(userRecoveryRequestDto);
   }
+
+  refresh() {
+    
+  }
 }

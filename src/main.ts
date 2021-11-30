@@ -11,6 +11,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  // app.use(cookieParser());
   // app.useGlobalFilters(new NotFoundExceptionFilter());
   // app.setGlobalPrefix("api", {
   //   exclude: ['health', '']
