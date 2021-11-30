@@ -28,8 +28,10 @@ import { SearchModule } from './search/search.module';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         redis: {
-          host: configService.get('queue.host'),
-          port: +configService.get('queue.port'),
+          host: configService.get<string>('queue.host'),
+          port: +configService.get<string>('queue.port'),
+          username: configService.get<string>('queue.username'),
+          password: configService.get<string>('queue.password')
         },
       }),
       inject: [ConfigService],

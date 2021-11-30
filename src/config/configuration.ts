@@ -9,6 +9,8 @@ export default () => ({
   queue: {
     host: process.env.QUEUE_HOST,
     port: process.env.QUEUE_PORT,
+    username: process.env.QUEUE_USERNAME,
+    password: process.env.QUEUE_PASSWORD
   },
   s3: {
     bucketEndpoint: process.env.S3_BUCKETENDPOINT,
