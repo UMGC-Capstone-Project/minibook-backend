@@ -6,11 +6,11 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-    }),
-  );
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     transform: true,
+  //   }),
+  // );
   // app.use(cookieParser());
   // app.useGlobalFilters(new NotFoundExceptionFilter());
   // app.setGlobalPrefix("api", {
