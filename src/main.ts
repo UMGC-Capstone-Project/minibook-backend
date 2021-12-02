@@ -16,7 +16,7 @@ async function bootstrap() {
   // app.setGlobalPrefix("api", {
   //   exclude: ['health', '']
   // });
-
+  app.enableCors();
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
