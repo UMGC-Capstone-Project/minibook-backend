@@ -8,10 +8,11 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity';
 import { User } from '../../user/services/users.service';
 import { UserCreateRequestDto } from 'src/user/dto/UserCreateRequestDto';
-import { UserLoginResponseDto } from '../dto/UserLoginResponseDto';
 import { UserRecoveryResponseDto } from '../dto/UserRecoveryResponseDto';
 import { UserRecoveryRequestDto } from '../dto/UserRecoveryRequestDto';
 import { MailerService } from '@nestjs-modules/mailer';
+import { AuthenticationResposne } from '../dto/AuthenticationResponse.';
+import { toUserDto } from 'src/common/mapper';
 
 @Injectable()
 export class AuthService {
@@ -37,12 +38,13 @@ export class AuthService {
   }
 
   // Local Strategy -> Validate User -> Login -> AccessTokenPayload
-  public async login(user: any): Promise<UserLoginResponseDto> {
+  public async login(user: any): Promise<AuthenticationResposne> {
+    console.log(`login -> ${JSON.stringify(user)}`);
     const authenticationPayload = this.createAuthenticationPayload(user);
     const tokenPayload = await this.createToken(authenticationPayload);
 
     return {
-      access_token: tokenPayload,
+      token: tokenPayload,
     };
   }
 
@@ -68,10 +70,8 @@ export class AuthService {
   // ## Helpers ##
   public async validateUser(email: string, password: string): Promise<User> {
     const user = await this.userRepository.findOne({ where: { email: email } });
-
     if (user && (await isPasswordMatching(user.password, password))) {
-      const { password, newsposts, ...result } = user;
-      return result;
+      return toUserDto(user)
     }
     return null;
   }
@@ -88,9 +88,14 @@ export class AuthService {
     data: UserResponseDto,
   ): AuthenticationPayload {
     return {
-      displayName: data.displayname,
-      email: data.email,
-      id: data.id,
+      user: {
+        displayName: data.displayname,
+        userId: data.id,
+        email: data.email,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        avatar: data.avatar
+      }
     };
   }
 

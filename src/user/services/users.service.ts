@@ -74,7 +74,7 @@ export class UsersService {
     return this.findOne({ where: { email: email } });
   }
 
-  async findByEmail(email: string): Promise<UserResponseDto> {
+  async findByEmail(email: string): Promise<UserEntity> {
     return await this.userRepository.findOne({ where: { email: email } });
   }
 
@@ -83,7 +83,7 @@ export class UsersService {
     return toUserDto(user);
   }
 
-  async findByDisplayName(displayName: string): Promise<UserResponseDto> {
+  async findByDisplayName(displayName: string): Promise<UserEntity> {
     return await this.userRepository.findOne({
       where: { displayname: displayName },
     });

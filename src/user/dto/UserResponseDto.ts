@@ -12,5 +12,10 @@ export class UserResponseDto {
   email: string;
 
   @IsUrl()
-  avatarUrl?: string;
+  avatar?: string;
+
+  firstname: string;
+
+  lastname:string
+
 }

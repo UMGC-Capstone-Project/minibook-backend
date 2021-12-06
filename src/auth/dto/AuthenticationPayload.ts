@@ -1,5 +1,13 @@
-export interface AuthenticationPayload {
-  id: number;
-  displayName: string;
-  email: string;
+// JWT + User Payload
+export class AuthenticationPayload {
+  user: {
+    userId: number;
+    displayName: string;
+    email: string;
+    firstname: string;
+    lastname: string;
+    avatar: string;
+  }
+  exp?: number;
+  iat?: number;
 }

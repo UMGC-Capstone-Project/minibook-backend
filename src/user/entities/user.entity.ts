@@ -92,6 +92,10 @@ export class UserEntity {
     this.password = await argon2.hash(this.password);
   }
 
+  getAvatarUrl(): string {
+    return this.avatar ? this.avatar.url : 'http://default'
+  }
+
   // @AfterInsert()
   // async createNewsboard() {
   //     const newsboardRepository = getRepository(NewsPostEntity);

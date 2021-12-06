@@ -13,10 +13,10 @@ import { UserCreateRequestDto } from '../../user/dto/UserCreateRequestDto';
 import { UserEntity } from '../../user/entities/user.entity';
 import { BadRequestResponseDto } from '../dto/BadRequestDto';
 import { UserLoginRequestDto } from '../dto/UserLoginRequestDto';
-import { UserLoginResponseDto } from '../dto/UserLoginResponseDto';
 import { UserRecoveryRequestDto } from '../dto/UserRecoveryRequestDto';
 import { UserRecoveryResponseDto } from '../dto/UserRecoveryResponseDto';
 import { UserCreateResponseDto } from 'src/user/dto/UserCreateResponseDto';
+import { AuthenticationResposne } from '../dto/AuthenticationResponse.';
 
 @Controller({
   path: 'auth',
@@ -24,7 +24,7 @@ import { UserCreateResponseDto } from 'src/user/dto/UserCreateResponseDto';
 })
 @ApiTags('authenticate')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('register')
   @ApiCreatedResponse({
@@ -49,10 +49,10 @@ export class AuthController {
   @ApiBody({
     type: UserLoginRequestDto,
   })
-  @ApiResponse({ status: 200, type: UserLoginResponseDto })
+  @ApiResponse({ status: 200, type: AuthenticationResposne })
   async login(
     @UserRequest() userRequest: UserLoginRequestDto,
-  ): Promise<UserLoginResponseDto> {
+  ): Promise<AuthenticationResposne> {
     return this.authService.login(userRequest);
   }
 
@@ -66,6 +66,6 @@ export class AuthController {
   }
 
   refresh() {
-    
+
   }
 }
