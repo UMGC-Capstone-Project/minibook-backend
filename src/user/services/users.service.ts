@@ -78,9 +78,8 @@ export class UsersService {
     return await this.userRepository.findOne({ where: { email: email } });
   }
 
-  async findById(id: number): Promise<UserResponseDto> {
-    const user = await this.userRepository.findOne(id);
-    return toUserDto(user);
+  async findById(id: number): Promise<UserEntity> {
+    return await this.userRepository.findOne(id);;
   }
 
   async findByDisplayName(displayName: string): Promise<UserEntity> {

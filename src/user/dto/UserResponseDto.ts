@@ -18,4 +18,8 @@ export class UserResponseDto {
 
   lastname:string
 
+  posts?: any[]
+
+  friends?: any[]
+
 }

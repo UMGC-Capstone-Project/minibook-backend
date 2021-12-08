@@ -16,7 +16,7 @@ import { UserLoginRequestDto } from '../dto/UserLoginRequestDto';
 import { UserRecoveryRequestDto } from '../dto/UserRecoveryRequestDto';
 import { UserRecoveryResponseDto } from '../dto/UserRecoveryResponseDto';
 import { UserCreateResponseDto } from 'src/user/dto/UserCreateResponseDto';
-import { AuthenticationResposne } from '../dto/AuthenticationResponse.';
+import { AuthenticationResponse } from '../dto/AuthenticationResponse.';
 
 @Controller({
   path: 'auth',
@@ -49,10 +49,10 @@ export class AuthController {
   @ApiBody({
     type: UserLoginRequestDto,
   })
-  @ApiResponse({ status: 200, type: AuthenticationResposne })
+  @ApiResponse({ status: 200, type: AuthenticationResponse })
   async login(
     @UserRequest() userRequest: UserLoginRequestDto,
-  ): Promise<AuthenticationResposne> {
+  ): Promise<AuthenticationResponse> {
     return this.authService.login(userRequest);
   }
 

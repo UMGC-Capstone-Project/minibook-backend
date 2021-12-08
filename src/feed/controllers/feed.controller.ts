@@ -17,6 +17,7 @@ import { FeedService } from '../services/feed.service';
   path: 'feed',
   version: '1',
 })
+
 @ApiTags('feed')
 @ApiBearerAuth()
 export class FeedController {
@@ -26,14 +27,14 @@ export class FeedController {
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   index(@UserRequest() user) {
-    return this.feedService.findByAuthor(user.id);
+    return this.feedService.findByAuthor(user.user.userId);
   }
 
   @Post()
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   create(@Body() newsPost, @UserRequest() user) {
-    return this.feedService.create(newsPost, user);
+    return this.feedService.create(newsPost, user.user);
   }
 
   @Put(':id')

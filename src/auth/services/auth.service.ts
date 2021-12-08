@@ -11,7 +11,7 @@ import { UserCreateRequestDto } from 'src/user/dto/UserCreateRequestDto';
 import { UserRecoveryResponseDto } from '../dto/UserRecoveryResponseDto';
 import { UserRecoveryRequestDto } from '../dto/UserRecoveryRequestDto';
 import { MailerService } from '@nestjs-modules/mailer';
-import { AuthenticationResposne } from '../dto/AuthenticationResponse.';
+import { AuthenticationResponse } from '../dto/AuthenticationResponse.';
 import { toUserDto } from 'src/common/mapper';
 
 @Injectable()
@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   // Local Strategy -> Validate User -> Login -> AccessTokenPayload
-  public async login(user: any): Promise<AuthenticationResposne> {
+  public async login(user: any): Promise<AuthenticationResponse> {
     console.log(`login -> ${JSON.stringify(user)}`);
     const authenticationPayload = this.createAuthenticationPayload(user);
     const tokenPayload = await this.createToken(authenticationPayload);

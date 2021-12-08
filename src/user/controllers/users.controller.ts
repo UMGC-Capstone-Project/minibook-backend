@@ -24,7 +24,7 @@ import {
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { UserRequest } from '../../common/decorator';
 import { UserResponseDto } from '../dto/UserResponseDto';
-import { toAvatarDto } from '../../common/mapper';
+import { toAvatarDto, toUserFullDto } from '../../common/mapper';
 import { UsersService } from '../services/users.service';
 import { FriendsService } from '../services/friend.service';
 import { InjectQueue } from '@nestjs/bull';
@@ -52,8 +52,17 @@ export class UsersController {
   @UsePipes(new ValidationPipe({ transform: true }))
   async index(@UserRequest() user): Promise<UserResponseDto> {
     if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+    const _user = await this.usersService.findById(user.user.userId);
+    return toUserFullDto(_user);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async me(@UserRequest() user): Promise<UserResponseDto> {
+    if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
     const _user = await this.usersService.findById(user.id);
-    return _user;
+    return toUserFullDto(_user);
   }
 
   @Post('avatar')
@@ -75,7 +84,10 @@ export class UsersController {
     @UserRequest() user,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const avatar = await this.usersService.addAvatar(user.id, file);
+    if(!file){
+      throw Error('no file passed')
+    }
+    const avatar = await this.usersService.addAvatar(user.user.userId, file);
     return toAvatarDto(avatar);
   }
 
@@ -86,14 +98,14 @@ export class UsersController {
     return await this.usersService.deleteAvatar(user.id);
   }
 
-  @Get(':id')
+  @Get(':displayName')
   @ApiParam({
-    name: 'id',
+    name: 'displayName',
     type: String,
   })
-  async indexById(@Param('id') id): Promise<UserResponseDto> {
-    const _user = await this.usersService.findById(id);
-    return _user;
+  async indexById(@Param('displayName') displayName): Promise<UserResponseDto> {
+    const _user = await this.usersService.findByDisplayName(displayName);
+    return toUserFullDto(_user);
   }
 
   @UseGuards(JwtAuthGuard)

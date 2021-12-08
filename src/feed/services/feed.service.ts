@@ -15,10 +15,10 @@ export class FeedService {
 
   async create(
     newsPost: NewsPostEntity,
-    user: UserResponseDto,
+    user: any,
   ): Promise<NewsPostEntity> {
     const post = await this.newsPostRepository.create({
-      author: { id: user.id },
+      author: { id: user.userId },
       body: newsPost.body,
     });
     const results = await this.newsPostRepository.save(post);
