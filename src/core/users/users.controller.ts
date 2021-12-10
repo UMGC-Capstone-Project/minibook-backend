@@ -14,6 +14,12 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  myProfile(@UserRequest() user) {
+    return this.usersService.findOneByEmail(user.email);
+  }
+
   @Get(':displayName')
   findOne(@Param('displayName') displayName: string): Promise<UserEntity> {
     return this.usersService.findOneByDisplayName(displayName);

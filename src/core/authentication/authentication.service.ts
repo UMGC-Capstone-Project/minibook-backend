@@ -1,4 +1,4 @@
-import { Injectable, UseInterceptors, NotFoundException } from '@nestjs/common';
+import { Injectable, UseInterceptors, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
 import { LoggingInterceptor } from '../shared/interceptors/logging.interceptor';
 import { UserRepository } from '../users/repositories/user.repository';
 import { JwtService } from '@nestjs/jwt';
@@ -48,8 +48,13 @@ export class AuthenticationService {
   }
 
   async register(authUserRegistrationRequest: AuthUserRegistrationRequest): Promise<AuthUserRegistrationResponse> {
-    const _user = await this.userRepository.createUser(authUserRegistrationRequest);
+  
+    if (await this.userRepository.isExists(authUserRegistrationRequest.email)) {
+      throw new HttpException('user already exists', HttpStatus.BAD_REQUEST);
+    }
 
+    const _user = await this.userRepository.createUser(authUserRegistrationRequest);
+    
     // send email
     // this.sendEmail(user.email, 'index', 'Welcome to MiniBook.io!', {
     //   username: user.displayname,

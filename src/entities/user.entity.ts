@@ -83,6 +83,21 @@ export class UserEntity extends BaseEntity {
   public followers: Array<number>;
   public following: Array<number>;
 
+  @Column({ default: 'none'})
+  gender: string
+
+  @Column({ default: 'none'})
+  location: string
+
+  @Column({ default: 'none'})
+  phonenumber: string
+
+  @Column({ default: 'none'})
+  country: string
+
+  @Column({ default: 'none'})
+  birthday: string
+
   // @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   // public created_at: Date;
 

@@ -45,4 +45,8 @@ export class UserRepository extends Repository<UserEntity> {
     async findOneByEmail(email: string): Promise<UserEntity> {
         return this.findOne({ where: { email } });
     }
+
+    async isExists(email: string): Promise<boolean> {
+        return !!await this.findOne({where: {email}});
+    }
 }
