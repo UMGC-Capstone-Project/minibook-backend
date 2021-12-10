@@ -2,22 +2,19 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { NewsPostEntity } from './feed/entities/news-post.entity';
-import { UsersModule } from './user/users.module';
-import { FeedModule } from './feed/feed.module';
-import { PostEntity } from './feed/entities/post.entity';
-import { UserEntity } from './user/entities/user.entity';
+import { NewsPostEntity } from './entities/news-post.entity';
+import { PostEntity } from './entities/post.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { HealthModule } from './health/health.module';
-import { ChatModule } from './chat/chat.module';
+import { HealthModule } from './core/health/health.module';
 import configuration from './config/configuration';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { FileModule } from './file/file.module';
-import { PublicFileEntity } from './file/entities/public-file.entity';
+import { PublicFileEntity } from './entities/public-file.entity';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { BullModule } from '@nestjs/bull';
-import { SearchModule } from './search/search.module';
+import { UserEntity } from './entities/user.entity';
+import { AuthenticationModule } from './core/authentication/authentication.module';
+import { FeedModule } from './core/feed/feed.module';
+import { UsersModule } from './core/users/users.module';
 
 @Module({
   imports: [
@@ -45,9 +42,9 @@ import { SearchModule } from './search/search.module';
         database: configService.get<string>('database.name'),
         username: configService.get<string>('database.username'),
         password: configService.get<string>('database.password'),
-        synchronize: configService.get<boolean>('database.synchronize'),
+        synchronize: true,
         keepConnectionAlive: true,
-        ssl: { 
+        ssl: {
           ca: configService.get<string>('database.certificateAuthority'),
           rejectUnauthorized: false,
         },
@@ -72,13 +69,10 @@ import { SearchModule } from './search/search.module';
       }),
       inject: [ConfigService],
     }),
-    AuthModule,
-    UsersModule,
-    FeedModule,
     HealthModule,
-    ChatModule,
-    FileModule,
-    SearchModule,
+    AuthenticationModule,
+    UsersModule,
+    FeedModule
   ],
   controllers: [AppController],
   providers: [AppService],

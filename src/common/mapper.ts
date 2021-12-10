@@ -1,14 +1,12 @@
-import { UserEntity } from '../user/entities/user.entity';
-import { UserResponseDto } from '../user/dto/UserResponseDto';
 import { buildImageUrl } from './utils';
-import { AvatarRequestDto } from '../user/dto/AvatarRequestDto';
-import { AvatarResponseDto } from '../user/dto/AvatarResponseDto';
+import { UserEntity } from '../entities/user.entity';
+import { AuthUserRegistrationResponse } from '../core/authentication/dto/auth-user-registration-response.dto';
 
-export const toUserDto = (data: UserEntity): UserResponseDto => {
+export const toUserDto = (data: UserEntity): any => {
   const { id, displayname, email, firstname, lastname, ...results } = data;
   const imageKey = results.avatar?.key ? results.avatar.key : 'common/default-avatar.jpg';
   console.log('do we get called?')
-  const userDto: UserResponseDto = {
+  const userDto: any = {
     id,
     displayname,
     email,
@@ -19,12 +17,12 @@ export const toUserDto = (data: UserEntity): UserResponseDto => {
   return userDto;
 };
 
-export const toUserFullDto = (data: UserEntity): UserResponseDto => {
+export const toUserFullDto = (data: UserEntity): any => {
   const { id, displayname, email, firstname, lastname, ...results } = data;
   const imageKey = results.avatar ? results.avatar.key : 'common/default-avatar.jpg';
   console.log('do we get called?')
 
-  const userDto: UserResponseDto = {
+  const userDto: any = {
     id,
     displayname,
     email,
@@ -57,10 +55,20 @@ export const toUserFullDto = (data: UserEntity): UserResponseDto => {
   return userDto;
 };
 
-export const toAvatarDto = (data: AvatarRequestDto): AvatarResponseDto => {
+export const toAvatarDto = (data: any): any => {
   const { id, key, url } = data;
   return {
     success: true,
     url: buildImageUrl(key),
   };
 };
+
+
+export const toUserRegistrationResponseDto = (data: UserEntity): AuthUserRegistrationResponse => {
+  const { id, email, displayname } = data;
+  return {
+    userId: id,
+    email: email,
+    displayname: displayname,
+  }
+}

@@ -71,3 +71,34 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+
+
+```typescript
+import { Injectable, Type } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
+import { Repository } from 'typeorm';
+import { UserEntity } from '../entities/user.entity';
+
+export interface IRepositoryService<T> { 
+    create(dto: T): Promise<any>;
+}
+
+export function GenericRepository<T>(entity: EntityClassOrSchema): Type<IRepositoryService<any>> {
+    class GenericRepositoryHost {
+        @InjectRepository(entity) private readonly userRepository: Repository<T>
+
+        async create() {
+            
+        }
+    }
+
+    return GenericRepositoryHost;
+}
+
+export class GenericRepositoryService extends GenericRepository<UserEntity>(UserEntity) {
+
+
+}
+```
