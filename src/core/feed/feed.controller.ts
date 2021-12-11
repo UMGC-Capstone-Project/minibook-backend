@@ -20,8 +20,12 @@ export class FeedController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll(@UserRequest() user): Promise<PostEntity[]> {
-    return this.feedService.findAll(+user.id);
+  async findAll(@UserRequest() user): Promise<PostEntity[]> {
+    console.log(`User Feed: ${JSON.stringify(user)}`)
+    const _feed = await this.feedService.findAll(+user.id);
+    console.log(_feed);
+    console.log(JSON.stringify(_feed));
+    return _feed;
   }
 
   @Get(':id')

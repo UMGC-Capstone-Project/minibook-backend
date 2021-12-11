@@ -20,6 +20,11 @@ export class FeedService {
   }
 
   async findAll(id: number): Promise<PostEntity[]> {
+    return await this.postRepository.find({
+      where: {
+        author: id
+      }
+    })
     return await this.postRepository
       .createQueryBuilder('post')
       .innerJoinAndSelect('post.author', 'author')

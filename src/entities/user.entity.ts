@@ -84,11 +84,11 @@ export class UserEntity extends BaseEntity {
   })
   lastname: string;
 
-  @OneToMany(() => ConnectionEntity, (connection) => connection.followers)
-  public followers: ConnectionEntity[];
-
   @OneToMany(() => ConnectionEntity, (connection) => connection.following)
-  public following: ConnectionEntity[];
+  following: ConnectionEntity[];
+
+  @OneToMany(() => ConnectionEntity, (connection) => connection.followers)
+  followers: ConnectionEntity[];
 
   @Column({ default: 'none' })
   gender: string

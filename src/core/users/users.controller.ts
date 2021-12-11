@@ -7,7 +7,9 @@ import { JwtAuthGuard } from '../authentication/guard/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(
+    private readonly usersService: UsersService
+    ) { }
 
   @Get()
   findAll() {
@@ -18,6 +20,20 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   myProfile(@UserRequest() user) {
     return this.usersService.findOneByEmail(user.email);
+  }
+
+  @Get('followings')
+  @UseGuards(JwtAuthGuard)
+  getFollowing(@UserRequest() user) {
+    console.log(user);
+    return this.usersService.followings(user);
+  }
+
+  @Get('followers')
+  @UseGuards(JwtAuthGuard)
+  getFollowers(@UserRequest() user) {
+    console.log(user);
+    return this.usersService.followers(user);
   }
 
   @Get(':displayName')
@@ -52,6 +68,7 @@ export class UsersController {
   responseToFriendRequest() {
 
   }
+
 
   @Get(':id/follow')
   @UseGuards(JwtAuthGuard)

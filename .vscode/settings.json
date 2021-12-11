@@ -1,5 +1,3 @@
 {
-  "files.exclude": {
-    "src/user": true
-  }
+  "files.exclude": {}
 }

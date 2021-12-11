@@ -8,6 +8,7 @@ import { ConnectionEntity } from '../../entities/connection-entity';
 
 @Injectable()
 export class UsersService {
+
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
@@ -41,7 +42,7 @@ export class UsersService {
   }
 
   async findOneByEmail(email: string): Promise<UserEntity> {
-    return await this.findOneByOptions({where: {email: email}, relations: ['followers', 'following']})
+    return await this.findOneByOptions({ where: { email: email }, relations: ['followers', 'following'] })
   }
 
   findOneByDisplayName(displayname: string): Promise<UserEntity> {
@@ -58,12 +59,24 @@ export class UsersService {
     return this.userRepository.remove(_user)
   }
 
+  async followings(user: any) {
+    return await this.followersRepository.find({ where: { following: user.id }, relations: ['followers'] });
+  }
+
+  async followers(user: any) {
+    return await this.followersRepository.find({ where: { followers: user.id }, relations: ['following'] });
+  }
+
   async follow(id: number, user: any) {
-    const _currentUser = await this.findOneById(user.id);
-    const _followUser = await this.findOneById(id);
-    const _connection  = new ConnectionEntity()
-    _connection.followers = _followUser;
-    _connection.following = _currentUser;
+    // current user (6) Dave
+    const _follower = await this.findOneById(user.id);
+    // current user -> following -> other user (1) John
+    const _following = await this.findOneById(id);
+    const _connection = new ConnectionEntity()
+    // (6)
+    _connection.followers = _following;
+    // (1)
+    _connection.following = _follower;
     return await this.followersRepository.save(_connection);
   }
 
