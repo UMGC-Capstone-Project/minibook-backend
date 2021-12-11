@@ -38,7 +38,7 @@ export class UsersService {
   }
 
   findOneById(id: number): Promise<UserEntity> {
-    return this.findOneByOptions({ where: { id: id } });
+    return this.findOneByOptions({ where: { id: id }, relations: ['followers', 'following'] })
   }
 
   async findOneByEmail(email: string): Promise<UserEntity> {
@@ -59,15 +59,15 @@ export class UsersService {
     return this.userRepository.remove(_user)
   }
 
-  async followings(user: any) {
+  async followings(user: any): Promise<ConnectionEntity[]> {
     return await this.followersRepository.find({ where: { following: user.id }, relations: ['followers'] });
   }
 
-  async followers(user: any) {
+  async followers(user: any): Promise<ConnectionEntity[]> {
     return await this.followersRepository.find({ where: { followers: user.id }, relations: ['following'] });
   }
 
-  async follow(id: number, user: any) {
+  async follow(id: number, user: any): Promise<ConnectionEntity> {
     // current user (6) Dave
     const _follower = await this.findOneById(user.id);
     // current user -> following -> other user (1) John

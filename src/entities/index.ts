@@ -1,4 +1,3 @@
-export { NewsPostEntity } from "./news-post.entity"
 export { PostEntity } from "./post.entity"
 export { PrivateFileEntity } from "./private-file.entity"
 export { ProfileEntity } from "./profile.entity"

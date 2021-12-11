@@ -15,7 +15,6 @@ import * as argon2 from 'argon2';
 
 import { ApiProperty } from '@nestjs/swagger';
 import { PublicFileEntity } from 'src/entities/public-file.entity';
-import { NewsPostEntity } from './news-post.entity';
 import { PostEntity } from './post.entity';
 import { ConnectionEntity } from './connection-entity';
 
@@ -62,11 +61,11 @@ export class UserEntity extends BaseEntity {
   // @OneToMany(type => FriendEntity, friend => friend.user)
   // friends: FriendEntity[];
 
-  @OneToMany(
-    (type) => NewsPostEntity,
-    (newsPostEntity) => newsPostEntity.author,
-  )
-  newsposts: NewsPostEntity[];
+  // @OneToMany(
+  //   (type) => NewsPostEntity,
+  //   (newsPostEntity) => newsPostEntity.author,
+  // )
+  // newsposts: NewsPostEntity[];
 
   @JoinColumn()
   @OneToOne(() => PublicFileEntity, { eager: true, nullable: true })

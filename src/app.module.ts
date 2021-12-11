@@ -11,7 +11,7 @@ import { BullModule } from '@nestjs/bull';
 import { AuthenticationModule } from './core/authentication/authentication.module';
 import { FeedModule } from './core/feed/feed.module';
 import { UsersModule } from './core/users/users.module';
-import { ConnectionEntity, NewsPostEntity, PostEntity, PublicFileEntity, UserEntity } from './entities';
+import { ConnectionEntity, PostEntity, PublicFileEntity, UserEntity } from './entities';
 
 @Module({
   imports: [
@@ -45,7 +45,7 @@ import { ConnectionEntity, NewsPostEntity, PostEntity, PublicFileEntity, UserEnt
           ca: configService.get<string>('database.certificateAuthority'),
           rejectUnauthorized: false,
         },
-        entities: [UserEntity, NewsPostEntity, PostEntity, PublicFileEntity, ConnectionEntity],
+        entities: [UserEntity, PostEntity, PublicFileEntity, ConnectionEntity],
       }),
       inject: [ConfigService],
     }),
