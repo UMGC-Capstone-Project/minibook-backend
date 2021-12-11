@@ -2,19 +2,16 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { NewsPostEntity } from './entities/news-post.entity';
-import { PostEntity } from './entities/post.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HealthModule } from './core/health/health.module';
 import configuration from './config/configuration';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { PublicFileEntity } from './entities/public-file.entity';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { BullModule } from '@nestjs/bull';
-import { UserEntity } from './entities/user.entity';
 import { AuthenticationModule } from './core/authentication/authentication.module';
 import { FeedModule } from './core/feed/feed.module';
 import { UsersModule } from './core/users/users.module';
+import { ConnectionEntity, NewsPostEntity, PostEntity, PublicFileEntity, UserEntity } from './entities';
 
 @Module({
   imports: [
@@ -48,7 +45,7 @@ import { UsersModule } from './core/users/users.module';
           ca: configService.get<string>('database.certificateAuthority'),
           rejectUnauthorized: false,
         },
-        entities: [UserEntity, NewsPostEntity, PostEntity, PublicFileEntity],
+        entities: [UserEntity, NewsPostEntity, PostEntity, PublicFileEntity, ConnectionEntity],
       }),
       inject: [ConfigService],
     }),

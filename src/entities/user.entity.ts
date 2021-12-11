@@ -2,11 +2,14 @@ import {
   BaseEntity,
   BeforeInsert,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import * as argon2 from 'argon2';
 
@@ -14,6 +17,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { PublicFileEntity } from 'src/entities/public-file.entity';
 import { NewsPostEntity } from './news-post.entity';
 import { PostEntity } from './post.entity';
+import { ConnectionEntity } from './connection-entity';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity {
@@ -46,7 +50,7 @@ export class UserEntity extends BaseEntity {
   @OneToMany(() => PostEntity, (post) => post.author)
   feedPosts: PostEntity[]
 
-  @Column({default: true})
+  @Column({ default: true })
   isPublished: boolean;
 
   // @OneToOne(type => ProfileEntity, profile => profile.user)
@@ -80,29 +84,32 @@ export class UserEntity extends BaseEntity {
   })
   lastname: string;
 
-  public followers: Array<number>;
-  public following: Array<number>;
+  @OneToMany(() => ConnectionEntity, (connection) => connection.followers)
+  public followers: ConnectionEntity[];
 
-  @Column({ default: 'none'})
+  @OneToMany(() => ConnectionEntity, (connection) => connection.following)
+  public following: ConnectionEntity[];
+
+  @Column({ default: 'none' })
   gender: string
 
-  @Column({ default: 'none'})
+  @Column({ default: 'none' })
   location: string
 
-  @Column({ default: 'none'})
+  @Column({ default: 'none' })
   phonenumber: string
 
-  @Column({ default: 'none'})
+  @Column({ default: 'none' })
   country: string
 
-  @Column({ default: 'none'})
+  @Column({ default: 'none' })
   birthday: string
 
-  // @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
-  // public created_at: Date;
+  @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
+  public created_at: Date;
 
-  // @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
-  // public updated_at: Date;
+  @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
+  public updated_at: Date;
 
   // @OneToOne(type => Settings, settings => settings.user)
   // settings: Settings;
@@ -119,13 +126,4 @@ export class UserEntity extends BaseEntity {
     return this.avatar ? this.avatar.url : 'http://default'
   }
 
-  // @AfterInsert()
-  // async createNewsboard() {
-  //     const newsboardRepository = getRepository(NewsPostEntity);
-  //     const _newsboard = new NewsPostEntity();
-  //     _newsboard.isPublished = false;
-  //     // _newsboard.user = this;
-  //     // _newsboard.views = 0;
-  //     newsboardRepository.save(_newsboard);
-  // }
 }

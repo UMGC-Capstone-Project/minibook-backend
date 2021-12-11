@@ -53,5 +53,11 @@ export class UsersController {
 
   }
 
+  @Get(':id/follow')
+  @UseGuards(JwtAuthGuard)
+  follow(@Param('id') id: string, @UserRequest() user) {
+    return this.usersService.follow(+id, user);
+  }
+
 
 }

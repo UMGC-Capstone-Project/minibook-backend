@@ -4,16 +4,15 @@ import { UserEntity } from '../../entities/user.entity';
 import { AuthUserRegistrationRequest } from '../authentication/dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ConnectionEntity } from '../../entities/connection-entity';
 
 @Injectable()
 export class UsersService {
-  findFriends() {
-    throw new Error('Method not implemented.');
-  }
-
   constructor(
     @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(ConnectionEntity)
+    private readonly followersRepository: Repository<ConnectionEntity>
   ) { }
 
   create(userRegistrationDto: AuthUserRegistrationRequest): Promise<UserEntity> {
@@ -41,8 +40,8 @@ export class UsersService {
     return this.findOneByOptions({ where: { id: id } });
   }
 
-  findOneByEmail(email: string): Promise<UserEntity> {
-    return this.findOneByOptions({ where: { email } });
+  async findOneByEmail(email: string): Promise<UserEntity> {
+    return await this.findOneByOptions({where: {email: email}, relations: ['followers', 'following']})
   }
 
   findOneByDisplayName(displayname: string): Promise<UserEntity> {
@@ -57,5 +56,18 @@ export class UsersService {
   async remove(id: number): Promise<UserEntity> {
     const _user = await this.findOneById(id);
     return this.userRepository.remove(_user)
+  }
+
+  async follow(id: number, user: any) {
+    const _currentUser = await this.findOneById(user.id);
+    const _followUser = await this.findOneById(id);
+    const _connection  = new ConnectionEntity()
+    _connection.followers = _followUser;
+    _connection.following = _currentUser;
+    return await this.followersRepository.save(_connection);
+  }
+
+  findFriends() {
+    throw new Error('Method not implemented.');
   }
 }
